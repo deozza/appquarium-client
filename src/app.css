@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .flex-c{
+        @apply flex flex-col items-center justify-center
+    }
+
+    .flex-r {
+        @apply flex flex-row justify-center justify-items-center items-center flex-wrap
+    }
+
+    .btn {
+        @apply p-2 border rounded-md transition-colors duration-300
+    }
+
+    .btn.btn-primary {
+        @apply bg-blue-500 hover:bg-white text-white hover:text-blue-600 hover:border-blue-600
+    }
+
+    .btn.btn-primary.btn-outlined {
+        @apply bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-blue-600
+    }
+
+    .btn.btn-secondary {
+        @apply bg-gray-500 hover:bg-white text-white hover:text-gray-600 hover:border-gray-600
+    }
+
+    .btn.btn-secondary.btn-outlined {
+        @apply bg-white hover:bg-gray-600 text-gray-600 hover:text-white border-gray-600
+    }
+
+    .btn.btn-success {
+        @apply bg-green-500 hover:bg-white text-white hover:text-green-500 hover:border-green-500
+    }
+
+    .btn.btn-success.btn-outlined {
+        @apply bg-white hover:bg-green-500 text-green-500 hover:text-white border-green-500
+    }
+
+    .btn.btn-warning {
+        @apply bg-yellow-500 hover:bg-white text-white hover:text-yellow-600 hover:border-yellow-600
+    }
+
+    .btn.btn-warning.btn-outlined {
+        @apply bg-white hover:bg-yellow-600 text-yellow-600 hover:text-white border-yellow-600
+    }
+
+    .btn.btn-danger {
+        @apply bg-red-500 hover:bg-white text-white hover:text-red-600 hover:border-red-600
+    }
+
+    .btn.btn-danger.btn-outlined {
+        @apply bg-white hover:bg-red-600 text-red-600 hover:text-white border-red-600
+    }
+
+    .btn.btn-info {
+        @apply bg-cyan-300 hover:bg-white text-white hover:text-cyan-400 hover:border-cyan-400
+    }
+
+    .btn.btn-danger.btn-outlined {
+        @apply bg-white hover:bg-cyan-400 text-cyan-400 hover:text-white border-cyan-400
+    }
+
+    .pill{
+        @apply mx-1 py-1 px-3 text-sm rounded-full text-white
+    }
+
+    .pill.pill-primary {
+        @apply bg-blue-500
+    }
+
+    .pill.pill-secondary {
+        @apply bg-gray-500
+    }
+
+    .pill.pill-success {
+        @apply bg-green-500
+    }
+
+    .pill.pill-warning {
+        @apply bg-yellow-500
+    }
+
+    .pill.pill-danger {
+        @apply bg-red-500
+    }
+
+    .pill.pill-info {
+        @apply bg-cyan-300
+    }
+}
+
+table {
+    border-collapse: collapse;
+    width: 98%;
+
+}
+
+table td {
+    border-top: 1px solid #ddd;
+    padding: 16px 8px;
+    font-size: 14px;
+}
+
+table th {
+    padding: 20px 8px;
+    text-align: left;
+    font-size: 1.063rem;
+}
