@@ -4,7 +4,7 @@
 	import BaseHeader from '../components/atoms/typography/header/BaseHeader.svelte';
 	import SpeciesList from '../components/molecules/speciesList/SpeciesList.svelte';
 
-	const header: BaseHeaderModel = new BaseHeaderModel('Les dernières espèces ajoutées')
+	const header: BaseHeaderModel = new BaseHeaderModel('Liste des espèces')
 		.setDisplaySizeOrTrowError('xxl')
 		.setSizeOrTrowError('h2')
 		.setColorOrTrowError('white')

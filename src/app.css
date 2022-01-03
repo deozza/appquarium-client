@@ -5,7 +5,8 @@
 @layer components {
 
     main > div.content{
-        @apply text-white
+        @apply text-white;
+        padding-top: 6rem;
     }
 
     .flex-c{
