@@ -52,8 +52,8 @@
 			<h2 class='mb-3 text-xl font-bold'>Espèce</h2>
 			<div class='flex-c items-start w-full'>
 
-			<p class='font-semibold'>Famille : <span class='font-normal'>{species.naming.species_family.name}</span></p>
-			<p class='font-semibold'>Genre : <span class='font-normal'>{species.naming.species_genre.name}</span></p>
+			<p><span class='font-semibold'>Famille : </span>{species.naming.species_family.name}</p>
+			<p><span class='font-semibold'>Genre : </span>{species.naming.species_genre.name}</p>
 			</div>
 		</div>
 
@@ -61,9 +61,9 @@
 			<h2 class='mb-3 text-xl font-bold'>Contraintes d'eau</h2>
 			<div class='flex-c items-start w-full'>
 
-				<p class='font-semibold'>pH : <span class='font-normal'>Entre {species.water_constraints.ph_min} et {species.water_constraints.ph_max}</span></p>
-				<p class='font-semibold'>GH: <span class='font-normal'>entre {species.water_constraints.gh_min} et {species.water_constraints.gh_max}</span></p>
-				<p class='font-semibold'>Température: <span class='font-normal'>Entre {species.water_constraints.temp_min} et {species.water_constraints.temp_max}°C</span></p>
+				<p><span class='font-semibold'>pH : </span>entre {species.water_constraints.ph_min} et {species.water_constraints.ph_max}</p>
+				<p><span class='font-semibold'>GH : </span>entre {species.water_constraints.gh_min} et {species.water_constraints.gh_max}</p>
+				<p><span class='font-semibold'>Température : </span>entre {species.water_constraints.temp_min} et {species.water_constraints.temp_max}°C</p>
 			</div>
 		</div>
 
@@ -71,13 +71,13 @@
 			<h2 class='mb-3 text-xl font-bold'>Habitat</h2>
 			<div class='flex-c items-start w-full'>
 
-				<p class='font-semibold'>Origine : <span class='font-normal'>amérique centrale</span></p>
-				<p class='font-semibold'>Zone de vie : <span class='font-normal'>surface</span></p>
-				<p class='font-semibold'>Plantes : <span class='font-normal'>Oui</span></p>
-				<p class='font-semibold'>Roches : <span class='font-normal'>indifférent</span></p>
-				<p class='font-semibold'>Racines : <span class='font-normal'>indifférent</span></p>
-				<p class='font-semibold'>Type de sable : <span class='font-normal'>indifférent</span></p>
-				<p class='font-semibold'>Lumière : <span class='font-normal'>indifférent</span></p>
+				<p><span class='font-semibold'>Origine : </span>amérique centrale</p>
+				<p><span class='font-semibold'>Zone de vie : </span>surface</p>
+				<p><span class='font-semibold'>Plantes : </span>Oui</p>
+				<p><span class='font-semibold'>Roches : </span>indifférent</p>
+				<p><span class='font-semibold'>Racines : </span>indifférent</p>
+				<p><span class='font-semibold'>Type de sable : </span>indifférent</p>
+				<p><span class='font-semibold'>Lumière : </span>indifférent</p>
 			</div>
 		</div>
 
@@ -85,10 +85,10 @@
 			<h2 class='mb-3 text-xl font-bold'>Aquarium</h2>
 			<div class='flex-c items-start w-full'>
 
-				<p class='font-semibold'>Volume brut minimal : <span class='font-normal'>54L</span></p>
-				<p class='font-semibold'>Longueur minimale : <span class='font-normal'>Poecilia</span></p>
-				<p class='font-semibold'>Hauteur minimale : <span class='font-normal'>Poecilia Reticulata</span></p>
-				<p class='font-semibold'>Hauteur maximale : <span class='font-normal'>Guppy</span></p>
+				<p><span class='font-semibold'>Volume brut minimal : </span>54L</p>
+				<p><span class='font-semibold'>Longueur minimale : </span>Poecilia</p>
+				<p><span class='font-semibold'>Hauteur minimale : </span>Poecilia Reticulata</p>
+				<p><span class='font-semibold'>Hauteur maximale : </span>Guppy</p>
 			</div>
 		</div>
 
@@ -96,10 +96,10 @@
 			<h2 class='mb-3 text-xl font-bold'>Comportement</h2>
 			<div class='flex-c items-start w-full'>
 
-				<p class='font-semibold'>Régime : <span class='font-normal'>omnivore</span></p>
-				<p class='font-semibold'>Avec les autres : <span class='font-normal'>calme</span></p>
-				<p class='font-semibold'>Entre eux : <span class='font-normal'>calme</span></p>
-				<p class='font-semibold'>Minimum dans le groupe: <span class='font-normal'>4</span></p>
+				<p><span class='font-semibold'>Régime : </span>omnivore</p>
+				<p><span class='font-semibold'>Avec les autres : </span>calme</p>
+				<p><span class='font-semibold'>Entre eux : </span>calme</p>
+				<p><span class='font-semibold'>Minimum dans le groupe: </span>4</p>
 				<p>1 male pour 3 femelles</p>
 			</div>
 		</div>
@@ -108,10 +108,10 @@
 			<h2 class='mb-3 text-xl font-bold'>Reproduction</h2>
 			<div class='flex-c items-start w-full'>
 
-				<p class='font-semibold'>Famille : Poecilidae</p>
-				<p class='font-semibold'>Genre: Poecilia</p>
-				<p class='font-semibold'>Nom: Poecilia Reticulata</p>
-				<p class='font-semibold'>Noms communs: Guppy</p>
+				<p><span class='font-semibold'>Famille : </span>Poecilidae</p>
+				<p><span class='font-semibold'>Genre: </span>Poecilia</p>
+				<p><span class='font-semibold'>Nom: </span>Poecilia Reticulata</p>
+				<p><span class='font-semibold'>Noms communs: </span>Guppy</p>
 			</div>
 		</div>
 

@@ -39,13 +39,13 @@
 				<BaseHeader baseHeaderModel={header} />
 				<div class='flex-r justify-start space-x-6 items-start'>
 					<ul>
-						<li><span class='font-bold'>Difficulté : </span>débutant</li>
-						<li><span class='font-bold'>Origine : </span>{species.origin}</li>
+						<li><span class='font-semibold'>Difficulté : </span>débutant</li>
+						<li><span class='font-semibold'>Origine : </span>{species.origin}</li>
 					</ul>
 					<ul>
-						<li><span class='font-bold'>pH : </span>6-8</li>
-						<li><span class='font-bold'>GH : </span>10-20</li>
-						<li><span class='font-bold'>Température : </span>24-28</li>
+						<li><span class='font-semibold'>pH : </span>6-8</li>
+						<li><span class='font-semibold'>GH : </span>10-20</li>
+						<li><span class='font-semibold'>Température : </span>24-28</li>
 					</ul>
 
 				</div>
