@@ -1,34 +1,35 @@
 <script lang="ts">
-
 	import BaseHeaderModel from '../components/atoms/typography/header/BaseHeaderModel';
 	import BaseHeader from '../components/atoms/typography/header/BaseHeader.svelte';
 	import SpeciesList from '../components/molecules/speciesList/SpeciesList.svelte';
 	import Species from '../app/species/global/entities/Species';
 	import SpeciesUseCase from '../app/species/global/useCases/UseCase';
 	import Result from '../app/utils/useCasesResult/Result';
+	import SpeciesListLoading from '../components/molecules/speciesList/SpeciesListLoading.svelte';
 
 	const header: BaseHeaderModel = new BaseHeaderModel('Liste des espèces')
 		.setDisplaySizeOrTrowError('xxl')
 		.setSizeOrTrowError('h2')
-		.setColorOrTrowError('white')
+		.setColorOrTrowError('white');
 
-	export let listStyle: string = 'square'
+	export let listStyle: string = 'square';
+	export let dummyLoading: number = 3;
 
-	export let listOfSpecies: Array<Species> = []
+	export let listOfSpecies: Array<Species> = [];
 
-	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase()
+	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 
 	async function getSpecies(): Promise<Array<Species>> {
-		const listOfSpeciesFromHasura: Result = await speciesUseCase.getListOfSpecies('')
+		const listOfSpeciesFromHasura: Result = await speciesUseCase.getListOfSpecies('');
 		if (listOfSpeciesFromHasura.isFailed()) {
 			for (const error of listOfSpeciesFromHasura.errors) {
-				console.log(error)
+				console.log(error);
 			}
-			return listOfSpecies
+			return listOfSpecies;
 		}
-		listOfSpecies = listOfSpeciesFromHasura.content
+		listOfSpecies = listOfSpeciesFromHasura.content;
 
-		return listOfSpecies
+		return listOfSpecies;
 	}
 
 </script>
@@ -38,8 +39,8 @@
 
 	<div class='flex-r max-w-full'>
 		{#await getSpecies()}
-			<p>chargemenet</p>
-			{:then listOfSpecies}
+			<SpeciesListLoading {listStyle} {dummyLoading}/>
+		{:then listOfSpecies}
 				{#each listOfSpecies as species }
 					<SpeciesList {listStyle} {species}/>
 				{/each}
