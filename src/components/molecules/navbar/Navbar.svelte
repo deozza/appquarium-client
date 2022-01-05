@@ -47,7 +47,7 @@
 			</div>
 			<div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
 				<div class="flex-shrink-0 flex items-center">
-					<p class='text-white font-bold text-2xl'>Appquarium</p>
+					<a  href='/' class='text-white font-bold text-2xl'>Appquarium</a>
 				</div>
 				<div class="w-full hidden sm:block sm:ml-6">
 					<div class="w-full justify-center flex space-x-4">
