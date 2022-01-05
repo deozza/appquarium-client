@@ -1,6 +1,4 @@
 <script lang="ts">
-	import {  } from '@fortawesome/fontawesome-free/js/all'
-
 	import BaseHeader from '../../atoms/typography/header/BaseHeader.svelte';
 	import BaseHeaderModel from '../../atoms/typography/header/BaseHeaderModel';
 
