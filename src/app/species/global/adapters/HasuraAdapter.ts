@@ -29,7 +29,12 @@ export default class HasuraAdapter extends HasuraClient implements AdapterInterf
 
         let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species')
         queryBuilder.addOrderBy('updated_at')
-        queryBuilder.addReturn('category', 'updated_at', 'naming {name,  species_genre {name}}', 'medias(where: {thumbnail: {_eq: true}}) {url, title}')
+        queryBuilder.addReturn('category')
+        queryBuilder.addReturn('updated_at')
+        queryBuilder.addReturn('origin')
+        queryBuilder.addReturn('naming {name,  species_genre {name}}')
+        queryBuilder.addReturn('water_constraints {ph_min, ph_max, gh_min, gh_max, temp_min, temp_max}')
+        queryBuilder.addReturn('medias(where: {thumbnail: {_eq: true}}) {url, title}')
 
         const query: string = queryBuilder.getRequest()
 

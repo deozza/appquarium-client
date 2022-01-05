@@ -12,7 +12,7 @@
 		.setSizeOrTrowError('h2')
 		.setColorOrTrowError('white');
 
-	export let listStyle: string = 'horizontal';
+	export let listStyle: string = 'square';
 	export let dummyLoading: number = 3
 
 	export let listOfSpecies: Array<Species> = [];

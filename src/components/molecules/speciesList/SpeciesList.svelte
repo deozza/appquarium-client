@@ -43,9 +43,9 @@
 						<li><span class='font-semibold'>Origine : </span>{species.origin}</li>
 					</ul>
 					<ul>
-						<li><span class='font-semibold'>pH : </span>6-8</li>
-						<li><span class='font-semibold'>GH : </span>10-20</li>
-						<li><span class='font-semibold'>Température : </span>24-28</li>
+						<li><span class='font-semibold'>pH : </span>{species.water_constraints.ph_min} - {species.water_constraints.ph_max}</li>
+						<li><span class='font-semibold'>GH : </span>{species.water_constraints.gh_min} - {species.water_constraints.gh_max}</li>
+						<li><span class='font-semibold'>Température : </span>{species.water_constraints.temp_min} - {species.water_constraints.temp_max}</li>
 					</ul>
 
 				</div>
