@@ -30,19 +30,16 @@
 
 <section class='flex-c w-full h-[90vh] space-y-6'>
 	<BaseHeader baseHeaderModel={headerMain} />
-	<p class='text-semibold text-3xl'>Gérer un aquarium n'a jamais été aussi simple</p>
-
+	<p class='text-semibold text-xl lg:text-3xl text-center'>Gérer un aquarium n'a jamais été aussi simple</p>
 	<Stats />
-
 </section>
 
-<section class='flex-r justify-between w-full h-[50vh]'>
+<section class='flex-r justify-between w-full h-full lg:h-[50vh]'>
 	<div class='w-full lg:w-1/2 h-full order-1 lg:order-1 flex-c'>
 		<BaseHeader baseHeaderModel={headerLastSpeciesComment} />
 	</div>
 	<div class='w-full lg:w-1/2 h-full order-2 lg:order-2 flex-c bg-sky-800'>
 		<BaseHeader baseHeaderModel={headerLastSpecies} />
-
 		<div class='flex-r w-full'>
 			{#await getSpecies()}
 				<SpeciesListLoading {listStyle} {dummyLoading}/>
@@ -62,16 +59,13 @@
 						</div>
 					</div>
 				</a>
-
 			{:catch errors}
 			{/await}
-
 		</div>
 	</div>
-
 </section>
 
-<section class='flex-r justify-between w-full h-[50vh]'>
+<section class='flex-r justify-between w-full h-full lg:h-[50vh]'>
 	<div class='w-full lg:w-1/2 h-full order-1 lg:order-2 flex-c'>
 		<BaseHeader baseHeaderModel={headerDataComment} />
 		<BaseParagraph baseParagraphModel={paragraphDataComment} />
@@ -79,11 +73,6 @@
 	<div class='w-full lg:w-1/2 h-full order-2 lg:order-1 flex-c bg-teal-800'>
 		<div class='flex-r w-full'>
 
-
 		</div>
 	</div>
-
-
-
 </section>
-

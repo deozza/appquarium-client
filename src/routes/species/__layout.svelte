@@ -5,7 +5,7 @@
 
 </script>
 
-<main class='bg-gray-900 min-h-screen'>
+<main class='bg-gray-900'>
 	<Navbar/>
 	<div class='content px-2 sm:px-6 lg:px-8'>
 		<slot></slot>

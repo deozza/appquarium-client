@@ -49,25 +49,25 @@
 
 {#await loadStats()}
 
-	<div class='w-2/3 flex-r justify-around'>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+	<div class='w-2/3 flex-r justify-around space-y-3 lg:space-y-0'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<i class='fa fa-circle-notch fa-spin fa-2x'></i>
 			</div>
 			<div class='flex-c h-12'>
 				<p class='text-lg '>Espères répertoriées</p>
 			</div>
 		</div>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<i class='fa fa-circle-notch fa-spin fa-2x'></i>
 			</div>
 			<div class='flex-c h-12'>
 				<p class='text-lg '>Familles d'espèces</p>
 			</div>
 		</div>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<i class='fa fa-circle-notch fa-spin fa-2x'></i>
 			</div>
 			<div class='flex-c h-12'>
@@ -76,25 +76,25 @@
 		</div>
 	</div>
 {:then stats}
-	<div class='w-2/3 flex-r justify-around'>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+	<div class='w-2/3 flex-r justify-around space-y-3 lg:space-y-0'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<p class='text-semibold text-3xl'>{stats.species}</p>
 			</div>
 			<div class='flex-c h-12'>
 				<p class='text-lg '>Espères répertoriées</p>
 			</div>
 		</div>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<p class='text-semibold text-3xl'>{stats.speciesFamilies}</p>
 			</div>
 			<div class='flex-c h-12'>
 				<p class='text-lg '>Familles d'espèces</p>
 			</div>
 		</div>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<p class='text-semibold text-3xl'>{stats.speciesOrigins}</p>
 			</div>
 			<div class='flex-c h-12'>
@@ -103,25 +103,25 @@
 		</div>
 	</div>
 {:catch error}
-	<div class='w-2/3 flex-r justify-around'>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+	<div class='w-2/3 flex-r justify-around space-y-3 lg:space-y-0'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<i class='fa fa-circle-notch fa-spin fa-2x'></i>
 			</div>
 			<div class='flex-c h-12'>
 				<p class='text-lg '>Espères répertoriées</p>
 			</div>
 		</div>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<i class='fa fa-circle-notch fa-spin fa-2x'></i>
 			</div>
 			<div class='flex-c h-12'>
 				<p class='text-lg '>Familles d'espèces</p>
 			</div>
 		</div>
-		<div class='flex-c w-48  bg-gray-500 rounded-lg'>
-			<div class='flex-c h-16'>
+		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>
+			<div class='flex-c h-12 lg:h16'>
 				<i class='fa fa-circle-notch fa-spin fa-2x'></i>
 			</div>
 			<div class='flex-c h-12'>
