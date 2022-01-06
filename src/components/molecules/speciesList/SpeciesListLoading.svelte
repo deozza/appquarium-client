@@ -6,8 +6,8 @@
 {#each Array(dummyLoading) as _, i}
 	{#if listStyle === 'square'}
 
-	<div class='animate-pulse flex-c w-64 m-3 rounded-b-lg'>
-		<div class="flex-c bg-gray-400 w-full h-48">
+	<div class='animate-pulse flex-c w-48 m-3 rounded-b-lg'>
+		<div class="flex-c bg-gray-400 w-full h-32">
 			<i class='fa fa-camera-retro fa-6x'></i>
 		</div>
 		<div class='flex-r justify-around bg-gray-700 p-6 h-20 rounded-b-lg w-full' >

@@ -1,7 +1,9 @@
 import Result from "../../../utils/useCasesResult/Result";
 
-export default interface UseCaseInterface {
+export default interface SpeciesUseCaseInterface {
     getTotalSpecies(jwt: string): Promise<Result>
+
+    getTotalSpeciesOrigins(jwt: string): Promise<Result>
 
     getListOfSpecies(jwt: string): Promise<Result>
 

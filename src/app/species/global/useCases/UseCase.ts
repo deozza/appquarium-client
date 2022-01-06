@@ -1,16 +1,16 @@
-import type UseCaseInterface from "./UseCaseInterface";
+import type SpeciesUseCaseInterface from "./UseCaseInterface";
 
 import Result from "../../../utils/useCasesResult/Result";
 import UseCaseError from "../../../utils/useCasesResult/types/UseCaseError";
 
 import Species from "../entities/Species";
 
-import Services from "../services/Services";
+import SpeciesServicesInterface from "../services/Services";
 
-export default class SpeciesUseCase implements UseCaseInterface {
+export default class SpeciesUseCase implements SpeciesUseCaseInterface {
     async getTotalSpecies(jwt: string): Promise<Result> {
         let result: Result = new Result()
-        const speciesService: Services = new Services()
+        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
         const totalSpecies: number | null = await speciesService.queryTotalSpecies(jwt)
 
@@ -24,9 +24,25 @@ export default class SpeciesUseCase implements UseCaseInterface {
         return result
     }
 
+    async getTotalSpeciesOrigins(jwt: string): Promise<Result> {
+        let result: Result = new Result()
+        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+
+        const totalSpeciesOrigins: number | null = await speciesService.queryTotalSpeciesOrigins(jwt)
+
+        if (totalSpeciesOrigins === null) {
+            result.addError('Query failed', 400)
+            return result
+        }
+
+        result.content = totalSpeciesOrigins
+        result.addSuccess("Query is ok", 200)
+        return result
+    }
+
     async getSpecies(jwt: string, genre: string, name: string): Promise<Result> {
         let result: Result = new Result()
-        const speciesService: Services = new Services()
+        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
         let species: Species | UseCaseError = await speciesService.queryGetSpecies(jwt, genre, name)
 
@@ -49,7 +65,7 @@ export default class SpeciesUseCase implements UseCaseInterface {
 
     async getListOfSpecies(jwt: string): Promise<Result> {
         let result: Result = new Result()
-        const speciesService: Services = new Services()
+        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
         const listOfSpecies: Array<Species> | UseCaseError = await speciesService.queryListOfSpecies(jwt)
 
@@ -65,7 +81,7 @@ export default class SpeciesUseCase implements UseCaseInterface {
 
     async getSpeciesCategories(jwt: string): Promise<Result> {
         let result: Result = new Result()
-        const speciesService: Services = new Services()
+        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
         const speciesCategories: Array<string> | UseCaseError = await speciesService.querySpeciesCategories(jwt)
 
@@ -81,7 +97,7 @@ export default class SpeciesUseCase implements UseCaseInterface {
 
     async getSpeciesOrigins(jwt: string): Promise<Result> {
         let result: Result = new Result()
-        const speciesService: Services = new Services()
+        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
         const speciesOrigins: Array<string> | UseCaseError = await speciesService.querySpeciesOrigins(jwt)
 

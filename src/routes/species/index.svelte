@@ -1,11 +1,11 @@
 <script lang="ts">
-	import BaseHeaderModel from '../components/atoms/typography/header/BaseHeaderModel';
-	import BaseHeader from '../components/atoms/typography/header/BaseHeader.svelte';
-	import SpeciesList from '../components/molecules/speciesList/SpeciesList.svelte';
-	import Species from '../app/species/global/entities/Species';
-	import SpeciesUseCase from '../app/species/global/useCases/UseCase';
-	import Result from '../app/utils/useCasesResult/Result';
-	import SpeciesListLoading from '../components/molecules/speciesList/SpeciesListLoading.svelte';
+	import BaseHeaderModel from '../../components/atoms/typography/header/BaseHeaderModel';
+	import BaseHeader from '../../components/atoms/typography/header/BaseHeader.svelte';
+	import SpeciesList from '../../components/molecules/speciesList/SpeciesList.svelte';
+	import Species from '../../app/species/global/entities/Species';
+	import SpeciesUseCase from '../../app/species/global/useCases/UseCase';
+	import Result from '../../app/utils/useCasesResult/Result';
+	import SpeciesListLoading from '../../components/molecules/speciesList/SpeciesListLoading.svelte';
 
 	const header: BaseHeaderModel = new BaseHeaderModel('Liste des espèces')
 		.setDisplaySizeOrTrowError('xxl')

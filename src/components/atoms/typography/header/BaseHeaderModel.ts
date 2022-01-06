@@ -10,6 +10,7 @@ export default class BaseHeaderModel {
     private displaySize: string
     private size: string
     private color: string
+    private _additionalClasses: string = ''
 
     constructor(content: string) {
         this.content = content
@@ -64,5 +65,13 @@ export default class BaseHeaderModel {
 
     public getSize(): string{
         return this.size
+    }
+
+    get additionalClasses(): string {
+        return this._additionalClasses;
+    }
+
+    set additionalClasses(value: string) {
+        this._additionalClasses = value;
     }
 }

@@ -3,8 +3,10 @@ import Species from "../entities/Species";
 import SpeciesFamily from "../entities/SpeciesFamily";
 import SpeciesGenre from "../entities/SpeciesGenre";
 
-export default interface AdapterInterface {
+export default interface SpeciesAdapterInterface {
     queryTotalSpecies(): Promise<number | null>
+
+    queryTotalSpeciesOrigins(): Promise<number | null>
 
     queryListOfSpecies(): Promise<Array<Species> | UseCaseError>
 

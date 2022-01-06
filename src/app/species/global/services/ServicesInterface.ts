@@ -1,8 +1,10 @@
 import UseCaseError from "../../../utils/useCasesResult/types/UseCaseError";
 import Species from "../entities/Species";
 
-export default interface ServicesInterface {
+export default interface SpeciesServicesInterface {
     queryTotalSpecies(jwt: string): Promise<number | null>
+
+    queryTotalSpeciesOrigins(jwt: string): Promise<number | null>
 
     queryGetSpecies(jwt: string, genre: string, name: string): Promise<Species | UseCaseError>
 

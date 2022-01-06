@@ -1,4 +1,4 @@
-import type AdapterInterface from "./AdapterInterface";
+import type SpeciesAdapterInterface from "./AdapterInterface";
 
 import UseCaseError from "../../../utils/useCasesResult/types/UseCaseError";
 import HasuraQueryBuilder from "../../../adapters/hasura/HasuraRequestBuilder/HasuraQueryBuilder";
@@ -8,7 +8,7 @@ import SpeciesGenre from "../entities/SpeciesGenre";
 import SpeciesFamily from "../entities/SpeciesFamily";
 import HasuraClient from "../../../adapters/hasura/HasuraClient";
 
-export default class HasuraAdapter extends HasuraClient implements AdapterInterface {
+export default class SpeciesHasuraAdapter extends HasuraClient implements SpeciesAdapterInterface {
 
     async queryTotalSpecies(): Promise<number | null> {
 
@@ -20,6 +20,21 @@ export default class HasuraAdapter extends HasuraClient implements AdapterInterf
             const data = await this.client.request(query)
             const totalSpecies: number = data.species_aggregate.aggregate.count
             return totalSpecies
+        } catch (e) {
+            return null
+        }
+    }
+
+    async queryTotalSpeciesOrigins(): Promise<number | null> {
+
+        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_origin_aggregate')
+        queryBuilder.addReturn('aggregate {count}')
+        const query: string = queryBuilder.getRequest()
+
+        try {
+            const data = await this.client.request(query)
+            const totalSpeciesOrigins: number = data.species_origin_aggregate.aggregate.count
+            return totalSpeciesOrigins
         } catch (e) {
             return null
         }
