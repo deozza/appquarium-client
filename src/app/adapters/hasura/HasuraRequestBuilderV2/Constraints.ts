@@ -33,8 +33,6 @@ export default class Constraints{
 			constraintAsGQLString += whereConstraints
 		}
 
-		console.log(constraintAsGQLString)
-
 		if(orderByConstraints !== null){
 			if(constraintAsGQLString === null){
 				constraintAsGQLString = '('
@@ -45,9 +43,6 @@ export default class Constraints{
 			constraintAsGQLString += orderByConstraints
 		}
 
-		console.log(constraintAsGQLString)
-
-
 		if(offsetConstraints !== null){
 			if(constraintAsGQLString === null){
 				constraintAsGQLString = '('
@@ -57,7 +52,6 @@ export default class Constraints{
 
 			constraintAsGQLString += offsetConstraints
 		}
-		console.log(constraintAsGQLString)
 
 		if(limitConstraints !== null){
 			if(constraintAsGQLString === null){
@@ -72,7 +66,6 @@ export default class Constraints{
 		if(constraintAsGQLString !== null){
 			constraintAsGQLString += ')'
 		}
-		console.log(constraintAsGQLString)
 
 		return constraintAsGQLString
 	}

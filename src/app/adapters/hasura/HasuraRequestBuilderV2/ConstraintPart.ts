@@ -2,8 +2,11 @@ export default class ConstraintPart{
 	constraintName: string
 	constraints: Array<object> | string
 
-	addConstraint(constraintName: string,	constraints: Array<object> | string): ConstraintPart {
+	constructor(constraintName: string) {
 		this.constraintName = constraintName
+	}
+
+	addConstraint(constraints: Array<object> | string): ConstraintPart {
 		this.constraints = constraints
 
 		return this

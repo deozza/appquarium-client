@@ -17,6 +17,7 @@ export default class Where {
     static expectedCompareModes(): Array<string> {
         return [
             '_eq',
+          '_like'
         ]
     }
 
