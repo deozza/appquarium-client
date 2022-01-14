@@ -10,6 +10,10 @@
         min-height: calc(100vh - 6rem);
     }
 
+    div.species-list-fullscreen{
+        min-height: calc(100vh - 18rem);
+    }
+
     .flex-c{
         @apply flex flex-col items-center justify-center
     }
@@ -39,7 +43,7 @@
     }
 
     .btn.btn-success {
-        @apply bg-green-500 hover:bg-white text-white hover:text-green-500 hover:border-green-500
+        @apply bg-green-500 border-green-500 hover:bg-white text-white hover:text-green-500 hover:border-green-500
     }
 
     .btn.btn-success.btn-outlined {

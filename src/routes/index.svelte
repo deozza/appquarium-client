@@ -9,13 +9,19 @@
 	import SpeciesListLoading from '../components/molecules/speciesList/SpeciesListLoading.svelte';
 	import BaseParagraph from '../components/atoms/typography/paragraph/BaseParagraph.svelte';
 	import Stats from '../components/molecules/index/stats/Stats.svelte';
-
-	export let listOfSpecies: Array<Species> = [];
+	import Constraints from '../app/adapters/hasura/HasuraRequestBuilderV2/Constraints';
+	import ConstraintPart from '../app/adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
 
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 
-	async function getSpecies(): Promise<Array<Species>> {
-		const listOfSpeciesFromHasura: Result = await speciesUseCase.getListOfSpecies('');
+	async function loadLastSpecies(): Promise<Array<Species>> {
+
+		let speciesConstraints: Constraints = new Constraints()
+		speciesConstraints.limit = 5
+		speciesConstraints.orderBy = new ConstraintPart('order_by')
+			.addConstraint([new ConstraintPart('updated_at').addConstraint('desc')])
+
+		const listOfSpeciesFromHasura: Result = await speciesUseCase.getListOfSpecies('', speciesConstraints);
 		if (listOfSpeciesFromHasura.isFailed()) {
 			for (const error of listOfSpeciesFromHasura.errors) {
 				console.log(error);
@@ -26,6 +32,9 @@
 
 		return listOfSpecies;
 	}
+
+	export let listOfSpecies: Promise<Array<Species>> = loadLastSpecies();
+
 </script>
 
 <section class='flex-c w-full h-[90vh] space-y-6'>
@@ -41,7 +50,7 @@
 	<div class='w-full lg:w-1/2 h-full order-2 lg:order-2 flex-c bg-sky-800'>
 		<BaseHeader baseHeaderModel={headerLastSpecies} />
 		<div class='flex-r w-full'>
-			{#await getSpecies()}
+			{#await listOfSpecies}
 				<SpeciesListLoading {listStyle} {dummyLoading}/>
 			{:then listOfSpecies}
 				{#each listOfSpecies as species }

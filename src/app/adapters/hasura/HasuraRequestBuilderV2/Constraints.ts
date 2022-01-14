@@ -1,8 +1,8 @@
 import ConstraintPart from './ConstraintPart';
 
 export default class Constraints{
-	where: object
-	orderBy: object
+	where: ConstraintPart
+	orderBy: ConstraintPart
 	offset: number
 	limit: number
 
@@ -12,7 +12,6 @@ export default class Constraints{
 		this.offset = null
 		this.limit = null
 	}
-
 
 	buildConstraints(){
 
@@ -75,7 +74,7 @@ export default class Constraints{
 			return null
 		}
 
-		const constraintPart = new ConstraintPart()
+		const constraintPart = new ConstraintPart('')
 		const constraintAsString: string = constraintPart.buildConstraintsAsGQLString(this.where)
 
 		return constraintAsString
@@ -86,7 +85,7 @@ export default class Constraints{
 			return null
 		}
 
-		const constraintPart = new ConstraintPart()
+		const constraintPart = new ConstraintPart('')
 		const constraintAsString: string = constraintPart.buildConstraintsAsGQLString(this.orderBy)
 
 

@@ -45,9 +45,12 @@
 
 		return stats;
 	}
+
+	const stats: Promise<object> = loadStats()
+
 </script>
 
-{#await loadStats()}
+{#await stats}
 
 	<div class='w-2/3 flex-r justify-around space-y-3 lg:space-y-0'>
 		<div class='flex-c w-full lg:w-48  bg-gray-500 rounded-lg'>

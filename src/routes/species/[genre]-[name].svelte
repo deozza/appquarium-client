@@ -20,7 +20,6 @@
 
 	let headerMainContent: string = $page.params.genre + ' ' + $page.params.name;
 	headerMain.setContent(headerMainContent);
-	export let species: Species;
 
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 
@@ -36,6 +35,9 @@
 
 		return species;
 	}
+
+	export let species: Promise<Species> = getSingleSpecies();
+
 </script>
 
 <section class='flex-c mb-6 text-center'>
@@ -43,7 +45,7 @@
 	<h4 class='font-bold text-lg'>Guppy</h4>
 </section>
 
-{#await getSingleSpecies()}
+{#await species}
 
 <section>
 	<p>Chargement ...</p>

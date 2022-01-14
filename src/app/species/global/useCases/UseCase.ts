@@ -7,6 +7,8 @@ import Species from "../entities/Species";
 
 import SpeciesServicesInterface from "../services/Services";
 
+import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
+
 export default class SpeciesUseCase implements SpeciesUseCaseInterface {
     async getTotalSpecies(jwt: string): Promise<Result> {
         let result: Result = new Result()
@@ -63,11 +65,11 @@ export default class SpeciesUseCase implements SpeciesUseCaseInterface {
         return result
     }
 
-    async getListOfSpecies(jwt: string): Promise<Result> {
+    async getListOfSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result> {
         let result: Result = new Result()
         const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const listOfSpecies: Array<Species> | UseCaseError = await speciesService.queryListOfSpecies(jwt)
+        const listOfSpecies: Array<Species> | UseCaseError = await speciesService.queryListOfSpecies(jwt, speciesConstraints)
 
         if (listOfSpecies instanceof UseCaseError) {
             result.errors.push(listOfSpecies)

@@ -4,6 +4,7 @@ export default class ConstraintPart{
 
 	constructor(constraintName: string) {
 		this.constraintName = constraintName
+		this.constraints = []
 	}
 
 	addConstraint(constraints: Array<object> | string): ConstraintPart {

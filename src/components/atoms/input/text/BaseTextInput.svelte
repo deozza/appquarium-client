@@ -10,7 +10,7 @@
 
 <div>
     <input
-            class="w-full py-2 px-3 border rounded-md border-black px-2"
+            class="w-full py-2 px-3 border rounded-md border-black px-2 text-black"
             class:border-red-500={baseTextInputModel.error === true}
             class:text-red-500={baseTextInputModel.error === true}
             id={baseTextInputModel.id}
