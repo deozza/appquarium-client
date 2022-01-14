@@ -5,7 +5,6 @@ import Species from "../entities/Species";
 
 import type AdapterInterface from "../adapters/AdapterInterface";
 import SpeciesAdapterInterface from "../adapters/HasuraAdapter";
-import ConstraintPart from '../../../adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
 import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
 
 export default class SpeciesServices implements SpeciesServicesInterface {
@@ -28,19 +27,19 @@ export default class SpeciesServices implements SpeciesServicesInterface {
         return await adapter.queryListOfSpecies(speciesConstraints)
     }
 
-    async queryGetSpecies(jwt: string, genre: string, name: string): Promise<Species | UseCaseError> {
+    async queryGetSpecies(jwt: string, speciesConstraints: Constraints): Promise<Species | UseCaseError> {
         const adapter: AdapterInterface = new SpeciesAdapterInterface(jwt)
 
-        return await adapter.queryGetSpecies(genre, name)
+        return await adapter.queryGetSpecies(speciesConstraints)
     }
 
-    async querySpeciesCategories(jwt: string): Promise<Array<string> | UseCaseError> {
+    async queryListOfSpeciesCategories(jwt: string): Promise<Array<string> | UseCaseError> {
         const adapter: AdapterInterface = new SpeciesAdapterInterface(jwt)
 
         return await adapter.queryListOfSpeciesCategories()
     }
 
-    async querySpeciesOrigins(jwt: string): Promise<Array<string> | UseCaseError> {
+    async queryListOfSpeciesOrigins(jwt: string): Promise<Array<string> | UseCaseError> {
         const adapter: AdapterInterface = new SpeciesAdapterInterface(jwt)
 
         return await adapter.queryListOfSpeciesOrigins()

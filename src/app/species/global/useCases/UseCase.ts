@@ -8,6 +8,7 @@ import Species from "../entities/Species";
 import SpeciesServicesInterface from "../services/Services";
 
 import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
+import ConstraintBuilder from '../adapters/Constraints';
 
 export default class SpeciesUseCase implements SpeciesUseCaseInterface {
     async getTotalSpecies(jwt: string): Promise<Result> {
@@ -46,7 +47,17 @@ export default class SpeciesUseCase implements SpeciesUseCaseInterface {
         let result: Result = new Result()
         const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        let species: Species | UseCaseError = await speciesService.queryGetSpecies(jwt, genre, name)
+        const constraintBuilder = new ConstraintBuilder()
+        let speciesConstraints: Constraints = new Constraints()
+
+        const filters: object = {
+            name: name,
+            species_genre: genre
+        }
+
+        speciesConstraints.where = constraintBuilder.buildConstraintsFilters(filters)
+
+        let species: Species | UseCaseError = await speciesService.queryGetSpecies(jwt, speciesConstraints)
 
         if (species instanceof UseCaseError) {
             if (species.code === 400) {
@@ -81,11 +92,11 @@ export default class SpeciesUseCase implements SpeciesUseCaseInterface {
         return result
     }
 
-    async getSpeciesCategories(jwt: string): Promise<Result> {
+    async getListSpeciesCategories(jwt: string): Promise<Result> {
         let result: Result = new Result()
         const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const speciesCategories: Array<string> | UseCaseError = await speciesService.querySpeciesCategories(jwt)
+        const speciesCategories: Array<string> | UseCaseError = await speciesService.queryListOfSpeciesCategories(jwt)
 
         if (speciesCategories instanceof UseCaseError) {
             result.errors.push(speciesCategories)
@@ -97,11 +108,11 @@ export default class SpeciesUseCase implements SpeciesUseCaseInterface {
         return result
     }
 
-    async getSpeciesOrigins(jwt: string): Promise<Result> {
+    async getListOfSpeciesOrigins(jwt: string): Promise<Result> {
         let result: Result = new Result()
         const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const speciesOrigins: Array<string> | UseCaseError = await speciesService.querySpeciesOrigins(jwt)
+        const speciesOrigins: Array<string> | UseCaseError = await speciesService.queryListOfSpeciesOrigins(jwt)
 
         if (speciesOrigins instanceof UseCaseError) {
             result.errors.push(speciesOrigins)

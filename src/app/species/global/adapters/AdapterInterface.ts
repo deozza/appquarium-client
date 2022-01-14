@@ -1,7 +1,5 @@
 import UseCaseError from "../../../utils/useCasesResult/types/UseCaseError";
 import Species from "../entities/Species";
-import SpeciesFamily from "../entities/SpeciesFamily";
-import SpeciesGenre from "../entities/SpeciesGenre";
 import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
 
 export default interface SpeciesAdapterInterface {
@@ -9,17 +7,11 @@ export default interface SpeciesAdapterInterface {
 
     queryTotalSpeciesOrigins(): Promise<number | null>
 
-    queryListOfSpecies(speciesConstraints: Constraints): Promise<Array<Species> | UseCaseError>
+    queryGetSpecies(speciesConstraints: Constraints): Promise<Species | UseCaseError>
 
-    queryGetSpecies(genre: string, name: string): Promise<Species | UseCaseError>
+    queryListOfSpecies(speciesConstraints: Constraints): Promise<Array<Species> | UseCaseError>
 
     queryListOfSpeciesCategories(): Promise<Array<string> | UseCaseError>
 
-    queryListOfSpeciesFamiliesByCategory(category: string): Promise<Array<SpeciesFamily> | UseCaseError>
-
-    queryListOfSpeciesGenresByCategory(category: string): Promise<Array<SpeciesGenre> | UseCaseError>
-
     queryListOfSpeciesOrigins(): Promise<Array<string> | UseCaseError>
-
-    queryListOfSpeciesByCategory(category: string): Promise<Array<Species> | UseCaseError>
 }

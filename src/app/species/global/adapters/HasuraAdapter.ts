@@ -1,20 +1,25 @@
 import type SpeciesAdapterInterface from "./AdapterInterface";
 
 import UseCaseError from "../../../utils/useCasesResult/types/UseCaseError";
-import HasuraQueryBuilder from "../../../adapters/hasura/HasuraRequestBuilder/HasuraQueryBuilder";
 
 import Species from "../entities/Species";
-import SpeciesGenre from "../entities/SpeciesGenre";
-import SpeciesFamily from "../entities/SpeciesFamily";
 import HasuraClient from "../../../adapters/hasura/HasuraClient";
+import Query from '../../../adapters/hasura/HasuraRequestBuilderV2/Query';
+import ConstraintPart from '../../../adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
+import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
 
 export default class SpeciesHasuraAdapter extends HasuraClient implements SpeciesAdapterInterface {
 
     async queryTotalSpecies(): Promise<number | null> {
 
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_aggregate')
-        queryBuilder.addReturn('aggregate {count}')
-        const query: string = queryBuilder.getRequest()
+        const queryBuilder: Query = new Query('query')
+          .addReturnToQuery(new Query('species_aggregate')
+            .addReturnToQuery(new Query('aggregate')
+              .addReturnToQuery('count')
+            )
+          )
+
+        const query: string = queryBuilder.buildQuery()
 
         try {
             const data = await this.client.request(query)
@@ -27,9 +32,14 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
 
     async queryTotalSpeciesOrigins(): Promise<number | null> {
 
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_origin_aggregate')
-        queryBuilder.addReturn('aggregate {count}')
-        const query: string = queryBuilder.getRequest()
+        const queryBuilder: Query = new Query('query')
+          .addReturnToQuery(new Query('species_origin_aggregate')
+            .addReturnToQuery(new Query('aggregate')
+              .addReturnToQuery('count')
+            )
+          )
+
+        const query: string = queryBuilder.buildQuery()
 
         try {
             const data = await this.client.request(query)
@@ -40,76 +50,50 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
         }
     }
 
-    async queryListOfSpecies(): Promise<Array<Species> | UseCaseError> {
+    async queryGetSpecies(speciesConstraints: Constraints): Promise<Species | UseCaseError> {
+        const queryBuilder: Query = new Query('query')
 
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species')
-        queryBuilder.addOrderBy('updated_at')
-        queryBuilder.addReturn('category')
-        queryBuilder.addReturn('updated_at')
-        queryBuilder.addReturn('origin')
-        queryBuilder.addReturn('naming {name,  species_genre {name}}')
-        queryBuilder.addReturn('water_constraints {ph_min, ph_max, gh_min, gh_max, temp_min, temp_max}')
-        queryBuilder.addReturn('medias(where: {thumbnail: {_eq: true}}) {url, title}')
+        const speciesSubQuery: Query = new Query('species')
+          .addReturnToQuery('origin')
+          .addReturnToQuery('category')
+          .addReturnToQuery(new Query('naming')
+            .addReturnToQuery('name')
+            .addReturnToQuery('old_names')
+            .addReturnToQuery('common_names')
+            .addReturnToQuery(new Query('species_genre')
+              .addReturnToQuery('name')
+            )
+            .addReturnToQuery(new Query('species_family')
+              .addReturnToQuery('name')
+            )
+          )
+          .addReturnToQuery(new Query('water_constraints')
+            .addReturnToQuery('ph_min')
+            .addReturnToQuery('ph_max')
+            .addReturnToQuery('gh_min')
+            .addReturnToQuery('gh_max')
+            .addReturnToQuery('temp_min')
+            .addReturnToQuery('temp_max')
+          )
+          .addReturnToQuery(new Query('animal_specs')
+            .addReturnToQuery('female_size')
+            .addReturnToQuery('male_size')
+            .addReturnToQuery('longevity_in_years')
+          )
+          .addReturnToQuery(new Query('medias')
+            .addReturnToQuery('url')
+            .addReturnToQuery('title')
+            .addReturnToQuery('source')
+          )
 
-        const query: string = queryBuilder.getRequest()
+        speciesSubQuery.constraints = speciesConstraints
+
+        queryBuilder.addReturnToQuery(speciesSubQuery)
+
+        const query: string = queryBuilder.buildQuery()
 
         try {
             const data = await this.client.request(query)
-            const listOfSpecies: Array<Species> = data.species.map((item: Array<string>) => new Species(item))
-            return listOfSpecies
-        } catch (e) {
-            if (e.message.includes("JWTExpired")) {
-                return new UseCaseError("JWT expired", 401)
-
-            }
-            return new UseCaseError(e.message, 400)
-        }
-    }
-
-    async queryGetSpecies(genre: string, name: string): Promise<Species | UseCaseError> {
-
-
-        const query: string = `query($genre: String!, $name: String!){
-          species(where: {naming: {species_genre: {name: {_eq: $genre}}, _and: {name: {_eq: $name}}}}) {
-            medias(where: {thumbnail: {_eq: true}}) {
-              url
-              title
-            }
-            naming {
-              name
-              species_genre {
-                name
-              }
-              old_names
-              common_names
-              species_family {
-                name
-              }
-              updated_at
-            }
-            origin
-            water_constraints {
-              gh_max
-              gh_min
-              ph_max
-              ph_min
-              temp_max
-              temp_min
-            }
-            animal_specs {
-              female_size
-              longevity_in_years
-              male_size
-            }
-            category
-          }
-        }`
-
-        try {
-            const data = await this.client.request(query, {
-                genre: genre,
-                name: name
-            })
 
             if(data.species.length === 1){
                 return new Species(data.species[0])
@@ -126,12 +110,67 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
         }
     }
 
+    async queryListOfSpecies(speciesConstraints: Constraints): Promise<Array<Species> | UseCaseError> {
+
+        const queryBuilder: Query = new Query('query')
+
+        const mediasSubQuery: Query = new Query('medias')
+          .addReturnToQuery('url')
+          .addReturnToQuery('title')
+
+        mediasSubQuery.constraints.where = new ConstraintPart('where')
+          .addConstraint([
+              new ConstraintPart('thumbnail').addConstraint([new ConstraintPart('_eq').addConstraint('true')])
+          ])
+
+        const speciesSubQuery: Query = new Query('species')
+          .addReturnToQuery('updated_at')
+          .addReturnToQuery('category')
+          .addReturnToQuery('origin')
+          .addReturnToQuery(
+            new Query('naming')
+              .addReturnToQuery('name')
+              .addReturnToQuery(
+                new Query('species_genre')
+                  .addReturnToQuery('name'))
+          )
+          .addReturnToQuery(
+            new Query('water_constraints')
+              .addReturnToQuery('ph_min')
+              .addReturnToQuery('ph_max')
+              .addReturnToQuery('gh_min')
+              .addReturnToQuery('gh_max')
+              .addReturnToQuery('temp_min')
+              .addReturnToQuery('temp_max')
+          )
+          .addReturnToQuery(mediasSubQuery)
+
+        speciesSubQuery.constraints = speciesConstraints
+
+        queryBuilder.addReturnToQuery(speciesSubQuery)
+
+        const query: string = queryBuilder.buildQuery()
+
+        try {
+            const data = await this.client.request(query)
+            const listOfSpecies: Array<Species> = data.species.map((item: Array<string>) => new Species(item))
+            return listOfSpecies
+        } catch (e) {
+            if (e.message.includes("JWTExpired")) {
+                return new UseCaseError("JWT expired", 401)
+
+            }
+            return new UseCaseError(e.message, 400)
+        }
+    }
 
     async queryListOfSpeciesCategories(): Promise<Array<string> | UseCaseError> {
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_categories')
-        queryBuilder.addReturn('name')
 
-        const query: string = queryBuilder.getRequest()
+        const queryBuilder: Query = new Query('query')
+          .addReturnToQuery(new Query('species_category')
+            .addReturnToQuery('name'))
+
+        const query: string = queryBuilder.buildQuery()
 
         try {
             const data = await this.client.request(query)
@@ -146,54 +185,13 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
         }
     }
 
-    async queryListOfSpeciesFamiliesByCategory(category: string): Promise<Array<SpeciesFamily> | UseCaseError> {
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_family')
-        queryBuilder.addReturn('uuid', 'name', 'category', 'user_uid')
-        queryBuilder.addParam('$category', 'species_categories_enum', category)
-        queryBuilder.addWhere('category', '_eq', '$category')
-        const query: string = queryBuilder.getRequest()
-
-        try {
-            const data = await this.client.request(query, {
-                category: category
-            })
-            const listOfSpeciesFamilies: Array<SpeciesGenre> = data.species_family.map((item: Array<string>) => new SpeciesFamily(item))
-            return listOfSpeciesFamilies
-        } catch (e) {
-            if (e.message.includes("JWTExpired")) {
-                return new UseCaseError("JWT expired", 401)
-            }
-            return new UseCaseError(e.message, 400)
-        }
-    }
-
-    async queryListOfSpeciesGenresByCategory(category: string): Promise<Array<SpeciesGenre> | UseCaseError> {
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_genre')
-        queryBuilder.addReturn('uuid', 'name', 'category', 'user_uid')
-        queryBuilder.addParam('$category', 'species_categories_enum', category)
-        queryBuilder.addWhere('category', '_eq', '$category')
-        const query: string = queryBuilder.getRequest()
-
-        try {
-            const data = await this.client.request(query, {
-                category: category
-            })
-
-            const listOfSpeciesGenres: Array<SpeciesGenre> = data.species_genre.map((item: Array<string>) => new SpeciesGenre(item))
-            return listOfSpeciesGenres
-        } catch (e) {
-            if (e.message.includes("JWTExpired")) {
-                return new UseCaseError("JWT expired", 401)
-
-            }
-            return new UseCaseError(e.message, 400)
-        }
-    }
-
     async queryListOfSpeciesOrigins(): Promise<Array<string> | UseCaseError> {
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species_origin')
-        queryBuilder.addReturn('name')
-        const query: string = queryBuilder.getRequest()
+
+        const queryBuilder: Query = new Query('query')
+          .addReturnToQuery(new Query('species_origin')
+            .addReturnToQuery('name'))
+
+        const query: string = queryBuilder.buildQuery()
 
         try {
             const data = await this.client.request(query)
@@ -208,27 +206,4 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
         }
     }
 
-    async queryListOfSpeciesByCategory(category: string): Promise<Array<Species> | UseCaseError> {
-        let queryBuilder: HasuraQueryBuilder = new HasuraQueryBuilder('species')
-        queryBuilder.addReturn('uuid', 'created_at', 'updated_at', 'category', 'publication_state', 'naming {name, species_genre {name}}')
-        queryBuilder.addParam('$category', 'species_categories_enum', category)
-        queryBuilder.addWhere('category', '_eq', '$category')
-        queryBuilder.addOrderBy('created_at')
-
-        const query: string = queryBuilder.getRequest()
-
-        try {
-            const data = await this.client.request(query, {
-                category: category
-            })
-
-            const listOfSpecies: Array<Species> = data.species.map((item: Array<string>) => new Species(item))
-            return listOfSpecies
-        } catch (e) {
-            if (e.message.includes("JWTExpired")) {
-                return new UseCaseError("JWT expired", 401)
-            }
-            return new UseCaseError(e.message, 400)
-        }
-    }
 }

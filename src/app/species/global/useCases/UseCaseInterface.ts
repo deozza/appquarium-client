@@ -8,7 +8,9 @@ export default interface SpeciesUseCaseInterface {
 
     getListOfSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result>
 
-    getSpeciesOrigins(jwt: string): Promise<Result>
+    getListOfSpeciesOrigins(jwt: string): Promise<Result>
+
+    getListSpeciesCategories(jwt: string): Promise<Result>
 
     getSpecies(jwt: string, genre: string, name: string): Promise<Result>
 }

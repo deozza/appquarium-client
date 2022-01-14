@@ -71,11 +71,36 @@ export default class HasuraQueryBuilder extends HasuraRequestBuilder {
 
         let computedWhere: string = 'where: {'
 
+        let intermediateWhereObject: object = {}
+
         for (let where in this.wheres) {
+
+            if(this.wheres[where].value !== null){
+
+                const splittedWhereProperty: Array<string> = this.wheres[where].property.split('.')
+                let jsonString: string = "{"
+                splittedWhereProperty.forEach((key:string) => {
+                    jsonString += key + ': {'
+                })
+
+                jsonString += this.wheres[where].compareMode = + ':' +  this.wheres[where].value
+
+                splittedWhereProperty.forEach((key:string) => {
+                    jsonString += '}'
+                })
+
+                jsonString += '}'
+
+                console.log(jsonString)
+            }
+
+            /*
+
             computedWhere += this.wheres[where].property + ': {' + this.wheres[where].compareMode + ': ' + this.wheres[where].value + '}'
             if (~~where < (this.wheres.length - 1)) {
                 computedWhere += ', '
             }
+             */
         }
 
         computedWhere += '}'

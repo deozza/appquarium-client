@@ -1,16 +1,17 @@
 import ConstraintPart from '../../../adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
-import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
 
 export default class ConstraintBuilder{
 
 	originConstraint: ConstraintPart
+	categoryConstraint: ConstraintPart
 	namingConstraints: ConstraintPart
 	speciesFamilyConstraints: ConstraintPart
 
 	constructor() {
 		this.originConstraint = new ConstraintPart('origin')
+		this.categoryConstraint = new ConstraintPart('category')
 		this.namingConstraints = new ConstraintPart('naming')
-		this.speciesFamilyConstraints = new ConstraintPart('species_family')
+		this.speciesFamilyConstraints = new ConstraintPart('species_genre')
 	}
 
 	private static initNameConstraint(): ConstraintPart{
@@ -37,6 +38,13 @@ export default class ConstraintBuilder{
 			whereConstraint.constraints = [
 				...whereConstraint.constraints,
 				this.originConstraint
+			]
+		}
+
+		if(this.buildCategoryConstraint(sanitizedFilters) === true){
+			whereConstraint.constraints = [
+				...whereConstraint.constraints,
+				this.categoryConstraint
 			]
 		}
 
@@ -72,6 +80,19 @@ export default class ConstraintBuilder{
 		return true
 	}
 
+	private buildCategoryConstraint(filters: object): boolean{
+		if(filters.hasOwnProperty('category') === false){
+			return false
+		}
+
+		if(filters.category === null || filters.category === ''){
+			return false
+		}
+
+		this.categoryConstraint.addConstraint([new ConstraintPart('_eq').addConstraint(filters.category)])
+		return true
+	}
+
 	private buildNamingConstraints(filters: object): boolean{
 
 		let constraintIsAdded: boolean = false
@@ -104,18 +125,18 @@ export default class ConstraintBuilder{
 	}
 
 	private buildSpeciesFamilyConstraints(filters: object): boolean{
-		if(filters.hasOwnProperty('species_family') === false){
+		if(filters.hasOwnProperty('species_genre') === false){
 			return false
 		}
 
-		if(filters.species_family === null || filters.species_family === ''){
+		if(filters.species_genre === null || filters.species_genre === ''){
 			return false
 		}
 
 		const nameConstraint: ConstraintPart = ConstraintBuilder.initNameConstraint()
 
 		this.speciesFamilyConstraints.addConstraint([nameConstraint.addConstraint([
-			new ConstraintPart('_ilike').addConstraint('"%'+filters.species_family+'%"')
+			new ConstraintPart('_ilike').addConstraint('"%'+filters.species_genre+'%"')
 		])])
 
 		return true

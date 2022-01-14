@@ -16,11 +16,17 @@
 	import BaseButton from '../../components/atoms/button/BaseButton.svelte';
 	import Constraints from '../../app/adapters/hasura/HasuraRequestBuilderV2/Constraints';
 	import ConstraintPart from '../../app/adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
+	import SpeciesFamily from '../../app/species/global/entities/SpeciesFamily';
+	import SpeciesFamiliesUseCase from '../../app/species/global/useCases/speciesNaming/speciesFamilies/UseCase';
+	import SpeciesGenresUseCase from '../../app/species/global/useCases/speciesNaming/speciesGenres/UseCase';
+	import SpeciesGenre from '../../app/species/global/entities/SpeciesGenre';
 
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
+	const speciesFamiliesUseCase: SpeciesFamiliesUseCase = new SpeciesFamiliesUseCase()
+	const speciesGenresUseCase: SpeciesGenresUseCase = new SpeciesGenresUseCase()
 
-	const labelFamilyName: BaseLabelModel = new BaseLabelModel('Famille', 'familyName');
-	const inputFamilyName: BaseTextInputModel = new BaseTextInputModel('familyName');
+	const labelGenreName: BaseLabelModel = new BaseLabelModel('Genre', 'genreName');
+	const inputGenreName: BaseTextInputModel = new BaseTextInputModel('genreName');
 
 	const labelName: BaseLabelModel = new BaseLabelModel('Nom', 'name');
 	const inputName: BaseTextInputModel = new BaseTextInputModel('name');
@@ -63,7 +69,7 @@
 		const filters: object = {
 			origin: inputOrigin.value,
 			name: inputName.value,
-			species_family: inputFamilyName.value
+			species_genre: inputGenreName.value
 		}
 
 		const constraintBuilder = new ConstraintBuilder()
@@ -84,9 +90,46 @@
 		return listOfSpecies
 	}
 
+	async function loadListOfSpeciesFamilies(): Promise<Array<SpeciesFamily>>{
+		const listOfSpeciesFamilies: Result = await speciesFamiliesUseCase.getListOfSpeciesFamilies('', {})
+		if (listOfSpeciesFamilies.isFailed()) {
+			for (const error of listOfSpeciesFamilies.errors) {
+				console.log(error);
+			}
+		}
+
+		console.log(listOfSpeciesFamilies)
+
+		return listOfSpeciesFamilies.content
+	}
+
+	async function loadListOfSpeciesGenres(): Promise<Array<SpeciesGenre>>{
+		const listOfSpeciesGenres: Result = await speciesGenresUseCase.getListOfSpeciesGenres('', {})
+		if (listOfSpeciesGenres.isFailed()) {
+			for (const error of listOfSpeciesGenres.errors) {
+				console.log(error);
+			}
+		}
+
+		return listOfSpeciesGenres.content
+	}
+
+	async function loadListOfSpeciesOrigins(): Promise<Array<string>>{
+		const listOfSpeciesOrigins: Result = await speciesUseCase.getListOfSpeciesOrigins('')
+		if (listOfSpeciesOrigins.isFailed()) {
+			for (const error of listOfSpeciesOrigins.errors) {
+				console.log(error);
+			}
+		}
+
+		return listOfSpeciesOrigins.content
+	}
+
 	let loadingSpecies: boolean = false
 	let listOfSpecies: Promise<Array<Species>> | Array<Species> = getSpecies();
-
+	let listOfSpeciesFamilies: Promise<Array<SpeciesFamily>> = loadListOfSpeciesFamilies()
+	let listOfSpeciesGenres: Promise<Array<SpeciesGenre>> = loadListOfSpeciesGenres()
+	let listOfSpeciesOrigins: Promise<Array<string>> = loadListOfSpeciesOrigins()
 
 </script>
 
@@ -101,8 +144,8 @@
 			<ul class="space-y-6">
 				<li class="flex-c">
 					<div class="flex-r">
-						<BaseLabel baseLabelModel={labelFamilyName} />
-						<BaseTextInput baseTextInputModel={inputFamilyName} />
+						<BaseLabel baseLabelModel={labelGenreName} />
+						<BaseTextInput baseTextInputModel={inputGenreName} />
 					</div>
 				</li>
 
