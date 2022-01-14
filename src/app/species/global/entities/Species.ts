@@ -1,9 +1,6 @@
 import SpeciesNaming from "./SpeciesNaming";
 import WaterConstraints from "./WaterConstraints";
 import AnimalSpecs from "./AnimalSpecs";
-import InvalidSpeciesObjectError from "../../../../errors/app/species/global/entities/InvalidSpeciesObjectError";
-import UnexpectedSpeciesPublicationStateError
-  from "../../../../errors/app/species/global/entities/UnexpectedSpeciesPublicationStateError";
 import Image from "../../../file/entities/Image";
 
 export default class Species {
@@ -52,45 +49,14 @@ export default class Species {
         return this.naming.species_genre?.name + " " + this.naming.name
     }
 
-    public getPublicationStateStyle(): string {
 
-        if (this.publication_state === '') {
-            throw new InvalidSpeciesObjectError()
+    public static getTranslatedOrigin(origin: string): string{
+        const ORIGIN_TRANSLATE: object = {
+            central_america: "Amérique centrale",
+            amazonia: "Amazonie"
         }
 
-        const publicationStateStyle: object = {
-            'DRAFT': 'secondary',
-            'PRE_PUBLISHED': 'info',
-            'MODERATED': 'warning',
-            'PUBLISHED': 'success',
-            'ARCHIVED': 'secondary',
-        }
+        return ORIGIN_TRANSLATE[origin]
 
-        if (!publicationStateStyle.hasOwnProperty(this.publication_state)) {
-            throw new UnexpectedSpeciesPublicationStateError(this.publication_state)
-        }
-
-        return publicationStateStyle[this.publication_state]
-    }
-
-    public getPublicationStateContent(): string {
-
-        if (this.publication_state === '') {
-            throw new InvalidSpeciesObjectError()
-        }
-
-        const publicationStateContent: object = {
-            'DRAFT': 'brouillon',
-            'PRE_PUBLISHED': 'pré-publié',
-            'MODERATED': 'modéré',
-            'PUBLISHED': 'publié',
-            'ARCHIVED': 'archivé',
-        }
-
-        if (!publicationStateContent.hasOwnProperty(this.publication_state)) {
-            throw new UnexpectedSpeciesPublicationStateError(this.publication_state)
-        }
-
-        return publicationStateContent[this.publication_state]
     }
 }

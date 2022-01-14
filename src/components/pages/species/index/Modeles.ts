@@ -7,5 +7,5 @@ export const header: BaseHeaderModel = new BaseHeaderModel('Liste des espèces')
 header.additionalClasses = 'text-center'
 
 export let listStyle: string = 'square'
-export let dummyLoading: number = 3
+export let dummyLoading: number = 12
 
