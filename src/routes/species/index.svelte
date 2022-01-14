@@ -98,8 +98,6 @@
 			}
 		}
 
-		console.log(listOfSpeciesFamilies)
-
 		return listOfSpeciesFamilies.content
 	}
 
