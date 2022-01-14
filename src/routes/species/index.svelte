@@ -57,13 +57,19 @@
 
 		const filters: object = {
 			origin: inputOrigin.value,
-			name: inputName.value,
-			species_genre: inputGenreName.value,
-			species_family: inputFamilyName.value
+			category: 'fish',
+			naming: {
+				name: inputName.value,
+				species_genre: {
+					name: inputGenreName.value
+				},
+				species_family: {
+					name: inputFamilyName.value
+				}
+			}
 		};
 
-		const constraintBuilder = new ConstraintBuilder();
-		speciesConstraints.where = constraintBuilder.buildConstraintsFilters(filters);
+		speciesConstraints.where = ConstraintBuilder.buildConstraintsFilters(filters);
 
 		const listOfFilteredSpeciesFromAdapter: Result = await speciesUseCase.getListOfSpecies('', speciesConstraints);
 		if (listOfFilteredSpeciesFromAdapter.isFailed()) {

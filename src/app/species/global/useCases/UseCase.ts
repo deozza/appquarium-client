@@ -43,19 +43,10 @@ export default class SpeciesUseCase implements SpeciesUseCaseInterface {
         return result
     }
 
-    async getSpecies(jwt: string, genre: string, name: string): Promise<Result> {
+    async getSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result> {
         let result: Result = new Result()
         const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const constraintBuilder = new ConstraintBuilder()
-        let speciesConstraints: Constraints = new Constraints()
-
-        const filters: object = {
-            name: name,
-            species_genre: genre
-        }
-
-        speciesConstraints.where = constraintBuilder.buildConstraintsFilters(filters)
 
         let species: Species | UseCaseError = await speciesService.queryGetSpecies(jwt, speciesConstraints)
 

@@ -1,27 +1,11 @@
 import ConstraintPart from '../../../adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
+import SpeciesNamingConstraints from './speciesNaming/Constraints';
 
 export default class ConstraintBuilder{
 
-	originConstraint: ConstraintPart
-	categoryConstraint: ConstraintPart
-	namingConstraints: ConstraintPart
-	speciesFamilyConstraints: ConstraintPart
-	speciesGenreConstraints: ConstraintPart
-
-	constructor() {
-		this.originConstraint = new ConstraintPart('origin')
-		this.categoryConstraint = new ConstraintPart('category')
-		this.namingConstraints = new ConstraintPart('naming')
-		this.speciesFamilyConstraints = new ConstraintPart('species_genre')
-		this.speciesGenreConstraints = new ConstraintPart('species_family')
-	}
-
-	private static initNameConstraint(): ConstraintPart{
-		return new ConstraintPart('name')
-	}
-
-	public buildConstraintsFilters(filters: object): ConstraintPart{
+	public static buildConstraintsFilters(filters: object): ConstraintPart{
 		let sanitizedFilters = this.sanitizeFilters(filters)
+
 		let filtersAreNull: boolean = true
 
 		Object.keys(sanitizedFilters).forEach((key: string) => {
@@ -36,30 +20,36 @@ export default class ConstraintBuilder{
 
 		let whereConstraint: ConstraintPart = new ConstraintPart('where')
 
-		if(this.buildOriginConstraint(sanitizedFilters) === true){
+		const originConstraints: ConstraintPart = this.buildOriginConstraint(filters)
+		if(originConstraints !== null){
 			whereConstraint.constraints = [
 				...whereConstraint.constraints,
-				this.originConstraint
+				originConstraints
 			]
 		}
 
-		if(this.buildCategoryConstraint(sanitizedFilters) === true){
+		const categoryConstraints: ConstraintPart = this.buildCategoryConstraint(filters)
+		if(categoryConstraints !== null){
 			whereConstraint.constraints = [
 				...whereConstraint.constraints,
-				this.categoryConstraint
+				categoryConstraints
 			]
 		}
 
-		if(this.buildNamingConstraints(sanitizedFilters) === true){
+		const speciesNamingConstraints: ConstraintPart = SpeciesNamingConstraints.buildConstraintsFilters(filters)
+		if(speciesNamingConstraints !== null){
 			whereConstraint.constraints = [
 				...whereConstraint.constraints,
-				this.namingConstraints
+				speciesNamingConstraints
 			]
 		}
+
+		console.log(whereConstraint)
+
 		return whereConstraint
 	}
 
-	private sanitizeFilters(filters: object): object{
+	private static sanitizeFilters(filters: object): object{
 		Object.keys(filters).forEach((key: string) => {
 			if(filters[key] === ''){
 				filters[key] = null
@@ -69,106 +59,31 @@ export default class ConstraintBuilder{
 		return filters
 	}
 
-	private buildOriginConstraint(filters: object): boolean{
+	private static buildOriginConstraint(filters: object): ConstraintPart{
 		if(filters.hasOwnProperty('origin') === false){
-			return false
+			return null
 		}
 
-		if(filters.origin === null || filters.origin === ''){
-			return false
+		if(filters.origin === null){
+			return null
 		}
 
-		this.originConstraint.addConstraint([new ConstraintPart('_eq').addConstraint(filters.origin)])
-		return true
+		return new ConstraintPart('origin')
+			.addConstraint([new ConstraintPart('_eq').addConstraint(filters.origin)])
 	}
 
-	private buildCategoryConstraint(filters: object): boolean{
+	private static buildCategoryConstraint(filters: object): ConstraintPart{
 		if(filters.hasOwnProperty('category') === false){
-			return false
+			return null
 		}
 
-		if(filters.category === null || filters.category === ''){
-			return false
+		if(filters.category === null){
+			return null
 		}
 
-		this.categoryConstraint.addConstraint([new ConstraintPart('_eq').addConstraint(filters.category)])
-		return true
+		return new ConstraintPart('category')
+			.addConstraint([new ConstraintPart('_eq').addConstraint(filters.category)])
 	}
 
-	private buildNamingConstraints(filters: object): boolean{
-
-		let constraintIsAdded: boolean = false
-
-		if(this.buildSpeciesFamilyConstraints(filters) === true){
-			this.namingConstraints.constraints = [
-				...this.namingConstraints.constraints,
-				this.speciesFamilyConstraints
-			]
-
-			constraintIsAdded = true
-		}
-
-		if(this.buildSpeciesGenreConstraints(filters) === true){
-			this.namingConstraints.constraints = [
-				...this.namingConstraints.constraints,
-				this.speciesGenreConstraints
-			]
-
-			constraintIsAdded = true
-		}
-
-		if(filters.hasOwnProperty('name') === false){
-			return constraintIsAdded
-		}
-
-		if(filters.name === null || filters.name === ''){
-			return constraintIsAdded
-		}
-
-		const nameConstraint: ConstraintPart = ConstraintBuilder.initNameConstraint()
-
-		this.namingConstraints.addConstraint([nameConstraint.addConstraint([
-			new ConstraintPart('_ilike').addConstraint('"%'+filters.name+'%"')
-		])])
-
-		constraintIsAdded = true
-		return constraintIsAdded
-	}
-
-	private buildSpeciesGenreConstraints(filters: object): boolean{
-		if(filters.hasOwnProperty('species_genre') === false){
-			return false
-		}
-
-		if(filters.species_genre === null || filters.species_genre === ''){
-			return false
-		}
-
-		const nameConstraint: ConstraintPart = ConstraintBuilder.initNameConstraint()
-
-		this.speciesGenreConstraints.addConstraint([nameConstraint.addConstraint([
-			new ConstraintPart('_ilike').addConstraint('"%'+filters.species_genre+'%"')
-		])])
-
-		return true
-	}
-
-	private buildSpeciesFamilyConstraints(filters: object): boolean{
-		if(filters.hasOwnProperty('species_family') === false){
-			return false
-		}
-
-		if(filters.species_family === null || filters.species_family === ''){
-			return false
-		}
-
-		const nameConstraint: ConstraintPart = ConstraintBuilder.initNameConstraint()
-
-		this.speciesFamilyConstraints.addConstraint([nameConstraint.addConstraint([
-			new ConstraintPart('_ilike').addConstraint('"%'+filters.species_family+'%"')
-		])])
-
-		return true
-	}
 }
 

@@ -17,6 +17,8 @@
 	import SpeciesUseCase from '../../app/species/global/useCases/UseCase';
 	import Result from '../../app/utils/useCasesResult/Result';
 	import SpeciesData from '../../components/molecules/speciesData/SpeciesData.svelte';
+	import Constraints from '../../app/adapters/hasura/HasuraRequestBuilderV2/Constraints';
+	import ConstraintBuilder from '../../app/species/global/adapters/Constraints';
 
 	let headerMainContent: string = $page.params.genre + ' ' + $page.params.name;
 	headerMain.setContent(headerMainContent);
@@ -24,7 +26,21 @@
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 
 	async function getSingleSpecies(): Promise<Species> {
-		const speciesFromHasura: Result = await speciesUseCase.getSpecies('', $page.params.genre, $page.params.name);
+
+		const filters: object = {
+			naming: {
+				name: $page.params.name,
+				species_genre: {
+					name: $page.params.genre
+				}
+			}
+		}
+
+		let speciesConstraints: Constraints = new Constraints()
+
+		speciesConstraints.where = ConstraintBuilder.buildConstraintsFilters(filters)
+
+		const speciesFromHasura: Result = await speciesUseCase.getSpecies('', speciesConstraints);
 		if (speciesFromHasura.isFailed()) {
 			for (const error of speciesFromHasura.errors) {
 				console.log(error);
