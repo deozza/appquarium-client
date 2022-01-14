@@ -27,12 +27,18 @@
 
 	const labelGenreName: BaseLabelModel = new BaseLabelModel('Genre', 'genreName');
 	const inputGenreName: BaseTextInputModel = new BaseTextInputModel('genreName');
+	inputGenreName.datalist = 'listOfSpeciesGenres'
+
+	const labelFamilyName: BaseLabelModel = new BaseLabelModel('Famille', 'familyName');
+	const inputFamilyName: BaseTextInputModel = new BaseTextInputModel('familyName');
+	inputFamilyName.datalist = 'listOfSpeciesFamilies'
 
 	const labelName: BaseLabelModel = new BaseLabelModel('Nom', 'name');
 	const inputName: BaseTextInputModel = new BaseTextInputModel('name');
 
 	const labelOrigin: BaseLabelModel = new BaseLabelModel('Biotope', 'origin');
 	const inputOrigin: BaseTextInputModel = new BaseTextInputModel('origin');
+	inputOrigin.datalist = 'listOfOrigins'
 
 	const buttonSubmitFilter: BaseButtonModel = new BaseButtonModel('Filtrer')
 		.setStyleOrThrowError('success');
@@ -47,7 +53,7 @@
 			])
 		])
 
-	async function getSpecies(): Promise<Array<Species>> {
+	async function loadSpecies(): Promise<Array<Species>> {
 		loadingSpecies = true
 		const listOfSpeciesFromHasura: Result = await speciesUseCase.getListOfSpecies('', speciesConstraints);
 		if (listOfSpeciesFromHasura.isFailed()) {
@@ -63,13 +69,14 @@
 		return listOfSpecies;
 	}
 
-	async function getSpeciesWithFilter(): Promise<Array<Species>>{
+	async function loadSpeciesWithFilter(): Promise<Array<Species>>{
 		loadingSpecies = true
 
 		const filters: object = {
 			origin: inputOrigin.value,
 			name: inputName.value,
-			species_genre: inputGenreName.value
+			species_genre: inputGenreName.value,
+			species_family: inputFamilyName.value
 		}
 
 		const constraintBuilder = new ConstraintBuilder()
@@ -90,7 +97,7 @@
 		return listOfSpecies
 	}
 
-	async function loadListOfSpeciesFamilies(): Promise<Array<SpeciesFamily>>{
+	async function loadFilters(): Promise<object>{
 		const listOfSpeciesFamilies: Result = await speciesFamiliesUseCase.getListOfSpeciesFamilies('', {})
 		if (listOfSpeciesFamilies.isFailed()) {
 			for (const error of listOfSpeciesFamilies.errors) {
@@ -98,10 +105,6 @@
 			}
 		}
 
-		return listOfSpeciesFamilies.content
-	}
-
-	async function loadListOfSpeciesGenres(): Promise<Array<SpeciesGenre>>{
 		const listOfSpeciesGenres: Result = await speciesGenresUseCase.getListOfSpeciesGenres('', {})
 		if (listOfSpeciesGenres.isFailed()) {
 			for (const error of listOfSpeciesGenres.errors) {
@@ -109,10 +112,6 @@
 			}
 		}
 
-		return listOfSpeciesGenres.content
-	}
-
-	async function loadListOfSpeciesOrigins(): Promise<Array<string>>{
 		const listOfSpeciesOrigins: Result = await speciesUseCase.getListOfSpeciesOrigins('')
 		if (listOfSpeciesOrigins.isFailed()) {
 			for (const error of listOfSpeciesOrigins.errors) {
@@ -120,14 +119,16 @@
 			}
 		}
 
-		return listOfSpeciesOrigins.content
+		return {
+			listOfSpeciesFamilies: listOfSpeciesFamilies.content,
+			listOfSpeciesGenres: listOfSpeciesGenres.content,
+			listOfSpeciesOrigins: listOfSpeciesOrigins.content,
+		}
 	}
 
 	let loadingSpecies: boolean = false
-	let listOfSpecies: Promise<Array<Species>> | Array<Species> = getSpecies();
-	let listOfSpeciesFamilies: Promise<Array<SpeciesFamily>> = loadListOfSpeciesFamilies()
-	let listOfSpeciesGenres: Promise<Array<SpeciesGenre>> = loadListOfSpeciesGenres()
-	let listOfSpeciesOrigins: Promise<Array<string>> = loadListOfSpeciesOrigins()
+	let listOfSpecies: Promise<Array<Species>> | Array<Species> = loadSpecies();
+	let listOfFilters: Promise<object> = loadFilters()
 
 </script>
 
@@ -138,31 +139,62 @@
 <section class='flex-r justify-between mt-6'>
 	<div class='bg-teal-800 flex-1 lg:species-list-fullscreen p-6'>
 		<h2 class='text-2xl'>Filtres</h2>
-		<form class='min-w-full' on:submit|preventDefault={getSpeciesWithFilter}>
+		<form class='min-w-full' on:submit|preventDefault={loadSpeciesWithFilter}>
 			<ul class="space-y-6">
-				<li class="flex-c">
-					<div class="flex-r">
-						<BaseLabel baseLabelModel={labelGenreName} />
-						<BaseTextInput baseTextInputModel={inputGenreName} />
-					</div>
-				</li>
+				{#await listOfFilters}
+				{:then listOfFilters}
+					<li class="flex-c">
+						<div class="flex-r">
+							<BaseLabel baseLabelModel={labelFamilyName} />
+							<BaseTextInput baseTextInputModel={inputFamilyName} />
+							<datalist id={inputFamilyName.datalist}>
+								{#each listOfFilters.listOfSpeciesFamilies as family, index}
+									<option value={family.name}>
+										{ family.name }
+									</option>
+								{/each}
+							</datalist>
+						</div>
+					</li>
 
-				<li class="flex-c">
-					<div class="flex-r">
-						<BaseLabel baseLabelModel={labelName} />
-						<BaseTextInput baseTextInputModel={inputName} />
-					</div>
-				</li>
+					<li class="flex-c">
+						<div class="flex-r">
+							<BaseLabel baseLabelModel={labelGenreName} />
+							<BaseTextInput baseTextInputModel={inputGenreName} />
+							<datalist id={inputGenreName.datalist}>
+								{#each listOfFilters.listOfSpeciesGenres as genre, index}
+									<option value={genre.name}>
+										{ genre.name }
+									</option>
+								{/each}
+							</datalist>
+						</div>
+					</li>
 
-				<li class="flex-c">
-					<div class="flex-r">
-						<BaseLabel baseLabelModel={labelOrigin} />
-						<BaseTextInput baseTextInputModel={inputOrigin} />
-					</div>
-				</li>
-				<li class="flex-c space-y-2">
-					<BaseButton baseButtonModel={buttonSubmitFilter} />
-				</li>
+					<li class="flex-c">
+						<div class="flex-r">
+							<BaseLabel baseLabelModel={labelName} />
+							<BaseTextInput baseTextInputModel={inputName} />
+						</div>
+					</li>
+
+					<li class="flex-c">
+						<div class="flex-r">
+							<BaseLabel baseLabelModel={labelOrigin} />
+							<BaseTextInput baseTextInputModel={inputOrigin} />
+							<datalist id={inputOrigin.datalist}>
+								{#each listOfFilters.listOfSpeciesOrigins as origin, index}
+									<option value={origin.name}>
+										{ origin.name }
+									</option>
+								{/each}
+							</datalist>
+						</div>
+					</li>
+					<li class="flex-c space-y-2">
+						<BaseButton baseButtonModel={buttonSubmitFilter} />
+					</li>
+				{/await}
 			</ul>
 		</form>
 

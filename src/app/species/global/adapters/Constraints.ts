@@ -6,12 +6,14 @@ export default class ConstraintBuilder{
 	categoryConstraint: ConstraintPart
 	namingConstraints: ConstraintPart
 	speciesFamilyConstraints: ConstraintPart
+	speciesGenreConstraints: ConstraintPart
 
 	constructor() {
 		this.originConstraint = new ConstraintPart('origin')
 		this.categoryConstraint = new ConstraintPart('category')
 		this.namingConstraints = new ConstraintPart('naming')
 		this.speciesFamilyConstraints = new ConstraintPart('species_genre')
+		this.speciesGenreConstraints = new ConstraintPart('species_family')
 	}
 
 	private static initNameConstraint(): ConstraintPart{
@@ -106,6 +108,15 @@ export default class ConstraintBuilder{
 			constraintIsAdded = true
 		}
 
+		if(this.buildSpeciesGenreConstraints(filters) === true){
+			this.namingConstraints.constraints = [
+				...this.namingConstraints.constraints,
+				this.speciesGenreConstraints
+			]
+
+			constraintIsAdded = true
+		}
+
 		if(filters.hasOwnProperty('name') === false){
 			return constraintIsAdded
 		}
@@ -124,7 +135,7 @@ export default class ConstraintBuilder{
 		return constraintIsAdded
 	}
 
-	private buildSpeciesFamilyConstraints(filters: object): boolean{
+	private buildSpeciesGenreConstraints(filters: object): boolean{
 		if(filters.hasOwnProperty('species_genre') === false){
 			return false
 		}
@@ -135,8 +146,26 @@ export default class ConstraintBuilder{
 
 		const nameConstraint: ConstraintPart = ConstraintBuilder.initNameConstraint()
 
-		this.speciesFamilyConstraints.addConstraint([nameConstraint.addConstraint([
+		this.speciesGenreConstraints.addConstraint([nameConstraint.addConstraint([
 			new ConstraintPart('_ilike').addConstraint('"%'+filters.species_genre+'%"')
+		])])
+
+		return true
+	}
+
+	private buildSpeciesFamilyConstraints(filters: object): boolean{
+		if(filters.hasOwnProperty('species_family') === false){
+			return false
+		}
+
+		if(filters.species_family === null || filters.species_family === ''){
+			return false
+		}
+
+		const nameConstraint: ConstraintPart = ConstraintBuilder.initNameConstraint()
+
+		this.speciesFamilyConstraints.addConstraint([nameConstraint.addConstraint([
+			new ConstraintPart('_ilike').addConstraint('"%'+filters.species_family+'%"')
 		])])
 
 		return true
