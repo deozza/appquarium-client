@@ -6,9 +6,11 @@
 	import { page } from '$app/stores';
 
 	export let navbarModele: NavbarModel = new NavbarModel('home');
+
 	navbarModele
 		.addLink(new NavbarLinkModel('/', 'Accueil', 'home'))
 		.addLink(new NavbarLinkModel('/species', 'Espèces', 'species'))
+		.addLink(new NavbarLinkModel('/matcher', 'Comparateur', 'matcher'))
 
 	function mobileMenuHandler() {
 		navbarModele.showMobileMenu = !navbarModele.showMobileMenu;

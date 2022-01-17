@@ -19,7 +19,7 @@
 {#if listStyle === 'square'}
 	<div class='flex-c w-48 m-3 rounded-b-lg hover:cursor-pointer transition-shadow duration-300' on:click={(e) => goto(species.computeLinkToSpecies())}>
 		<img class='h-32' src={species.images[0].url} alt={species.images[0].title}>
-		<div class='flex-c bg-gray-500 py-6 rounded-b-lg w-full' >
+		<div class='flex-c bg-gray-500 rounded-b-lg w-full' >
 			<BaseHeader baseHeaderModel={header} />
 		</div>
 	</div>

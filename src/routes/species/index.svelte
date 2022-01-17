@@ -144,7 +144,7 @@
 	<BaseHeader baseHeaderModel={header} />
 </section>
 
-<section class='flex-r justify-between mt-6'>
+<section class='flex-r justify-between'>
 	<div class='bg-teal-800 flex-1 lg:species-list-fullscreen p-6'>
 		<h2 class='text-2xl'>Filtres</h2>
 		<form class='min-w-full' on:submit|preventDefault={loadSpeciesWithFilter}>
@@ -200,7 +200,7 @@
 		</form>
 
 	</div>
-	<div class='flex-r justify-start items-start lg:species-list-fullscreen p-6' style='flex:2'>
+	<div class='flex-r lg:justify-start items-start lg:species-list-fullscreen p-6' style='flex:2'>
 		{#if loadingSpecies === true}
 			<SpeciesListLoading {listStyle} {dummyLoading}/>
 		{:else }

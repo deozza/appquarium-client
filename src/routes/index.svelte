@@ -61,7 +61,7 @@
 						<div class="flex-c bg-gray-400 w-full h-32">
 							<i class='fa fa-arrow-circle-right fa-4x text-gray-500'></i>
 						</div>
-						<div class='flex-r justify-around bg-gray-500 p-6 h-20 rounded-b-lg w-full' >
+						<div class='flex-r justify-around bg-gray-500 h-16 rounded-b-lg w-full' >
 							<div class="flex-c">
 								<p class='text-lg font-bold'>Voir plus</p>
 							</div>
