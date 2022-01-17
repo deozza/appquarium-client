@@ -4,8 +4,19 @@
 	import NavbarLink from './link/NavbarLink.svelte';
 	import NavbarLinkModel from './link/NavbarLinkModel';
 	import { page } from '$app/stores';
+	import { onDestroy, onMount } from 'svelte';
 
-	export let navbarModele: NavbarModel = new NavbarModel('home');
+	let navbarModele: NavbarModel = new NavbarModel('home');
+
+	let showMobileMenu: boolean = false
+
+	onMount(()=>{
+		showMobileMenu = false
+	})
+
+	onDestroy(()=>{
+		showMobileMenu = false
+	})
 
 	navbarModele
 		.addLink(new NavbarLinkModel('/', 'Accueil', 'home'))
@@ -13,7 +24,9 @@
 		.addLink(new NavbarLinkModel('/matcher', 'Comparateur', 'matcher'))
 
 	function mobileMenuHandler() {
-		navbarModele.showMobileMenu = !navbarModele.showMobileMenu;
+		console.log(showMobileMenu)
+		showMobileMenu = !showMobileMenu;
+		console.log(showMobileMenu)
 	}
 
 </script>
@@ -62,7 +75,7 @@
 		</div>
 	</div>
 
-	{#if navbarModele.showMobileMenu === true}
+	{#if showMobileMenu === true}
 		<!-- Mobile menu, show/hide based on menu state. -->
 		<div class="sm:hidden" id="mobile-menu">
 			<div class="px-2 pt-2 pb-3 space-y-1">
