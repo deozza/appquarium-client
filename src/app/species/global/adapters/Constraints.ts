@@ -44,8 +44,6 @@ export default class ConstraintBuilder{
 			]
 		}
 
-		console.log(whereConstraint)
-
 		return whereConstraint
 	}
 
