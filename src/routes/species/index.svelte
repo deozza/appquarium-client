@@ -21,6 +21,8 @@
 	import BaseOptionModel from '../../components/atoms/input/select/BaseOptionModel';
 	import BaseSelectInputModel from '../../components/atoms/input/select/BaseSelectInputModel';
 	import BaseSelectInput from '../../components/atoms/input/select/BaseSelectInput.svelte';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores'
 
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 	const speciesFamiliesUseCase: SpeciesFamiliesUseCase = new SpeciesFamiliesUseCase();
@@ -36,28 +38,31 @@
 		])
 		]);
 
-	async function loadSpecies(): Promise<Array<Species>> {
+	onMount(async() => {
+		await loadFilters()
+		loadingFilters = false
+		await loadSpeciesWithFilter(true)
+		loadingSpecies = false
+	})
+
+	async function loadSpeciesWithFilter(onMount: boolean = false): Promise<Array<Species>> {
 		loadingSpecies = true;
-		const listOfSpeciesFromHasura: Result = await speciesUseCase.getListOfSpecies('', speciesConstraints);
-		if (listOfSpeciesFromHasura.isFailed()) {
-			for (const error of listOfSpeciesFromHasura.errors) {
-				console.log(error);
-			}
-			loadingSpecies = false;
-			return listOfSpecies;
+
+		if(onMount === true){
+			inputOrigin.value = $page.url.searchParams.get('origin')
+			inputName.value = $page.url.searchParams.get('name')
+			inputGenreName.value = $page.url.searchParams.get('genre_name')
+			inputFamilyName.value = $page.url.searchParams.get('family_name')
+		}else{
+			$page.url.searchParams.set('origin', inputOrigin.value)
+			$page.url.searchParams.set('name', inputName.value)
+			$page.url.searchParams.set('genre_name', inputGenreName.value)
+			$page.url.searchParams.set('family_name', inputFamilyName.value)
+			window.history.replaceState({}, '',$page.url.pathname + $page.url.search)
 		}
-		listOfSpecies = listOfSpeciesFromHasura.content;
-		loadingSpecies = false;
-
-		return listOfSpecies;
-	}
-
-	async function loadSpeciesWithFilter(): Promise<Array<Species>> {
-		loadingSpecies = true;
 
 		const filters: object = {
 			origin: inputOrigin.value,
-			category: 'fish',
 			naming: {
 				name: inputName.value,
 				species_genre: {
@@ -76,8 +81,9 @@
 			for (const error of listOfFilteredSpeciesFromAdapter.errors) {
 				console.log(error);
 			}
+			listOfSpecies = []
 			loadingSpecies = false;
-
+			return listOfSpecies
 		}
 
 		listOfSpecies = listOfFilteredSpeciesFromAdapter.content;
@@ -110,16 +116,17 @@
 
 		const sanitizedListOfSpeciesOrigins: Array<BaseOptionModel> = listOfSpeciesOrigins.content.map((origin: string) => new BaseOptionModel(Species.getTranslatedOrigin(origin.name), origin.name));
 
-		return {
+		listOfFilters =  {
 			listOfSpeciesFamilies: listOfSpeciesFamilies.content,
 			listOfSpeciesGenres: listOfSpeciesGenres.content,
 			listOfSpeciesOrigins: sanitizedListOfSpeciesOrigins
 		};
 	}
 
-	let loadingSpecies: boolean = false;
-	let listOfSpecies: Promise<Array<Species>> | Array<Species> = loadSpecies();
-	let listOfFilters: Promise<object> = loadFilters();
+	let loadingSpecies: boolean = true;
+	let loadingFilters: boolean = true;
+	let listOfSpecies: Promise<Array<Species>> | Array<Species>;
+	let listOfFilters: object;
 
 	const labelGenreName: BaseLabelModel = new BaseLabelModel('Genre', 'genreName');
 	const inputGenreName: BaseTextInputModel = new BaseTextInputModel('genreName');
@@ -149,8 +156,8 @@
 		<h2 class='text-2xl'>Filtres</h2>
 		<form class='min-w-full' on:submit|preventDefault={loadSpeciesWithFilter}>
 			<ul class="space-y-6">
-				{#await listOfFilters}
-				{:then listOfFilters}
+				{#if loadingFilters}
+				{:else}
 					<li class="flex-c">
 						<div class="flex-r">
 							<BaseLabel baseLabelModel={labelFamilyName} />
@@ -195,13 +202,13 @@
 					<li class="flex-c space-y-2">
 						<BaseButton baseButtonModel={buttonSubmitFilter} />
 					</li>
-				{/await}
+				{/if}
 			</ul>
 		</form>
 
 	</div>
 	<div class='flex-r lg:justify-start items-start lg:species-list-fullscreen p-6' style='flex:2'>
-		{#if loadingSpecies === true}
+		{#if loadingSpecies}
 			<SpeciesListLoading {listStyle} {dummyLoading}/>
 		{:else }
 			{#each listOfSpecies as species }
