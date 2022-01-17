@@ -124,6 +124,7 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
           ])
 
         const speciesSubQuery: Query = new Query('species')
+          .addReturnToQuery('uuid')
           .addReturnToQuery('updated_at')
           .addReturnToQuery('category')
           .addReturnToQuery('origin')
