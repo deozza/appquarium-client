@@ -6,43 +6,42 @@ export default class ConstraintBuilder{
 	public static buildConstraintsFilters(filters: object): ConstraintPart{
 		let sanitizedFilters = this.sanitizeFilters(filters)
 
-		let filtersAreNull: boolean = true
-
-		Object.keys(sanitizedFilters).forEach((key: string) => {
-			if(sanitizedFilters[key] !== null){
-				filtersAreNull = false
-			}
-		})
-
-		if(filtersAreNull === true){
+		if(this.checkFiltersAreEmpty(sanitizedFilters) === true){
 			return null
 		}
 
-		let whereConstraint: ConstraintPart = new ConstraintPart('where')
+		let constraints: Array<ConstraintPart> = []
 
 		const originConstraints: ConstraintPart = this.buildOriginConstraint(filters)
 		if(originConstraints !== null){
-			whereConstraint.constraints = [
-				...whereConstraint.constraints,
+			constraints = [
+				...constraints,
 				originConstraints
 			]
 		}
 
 		const categoryConstraints: ConstraintPart = this.buildCategoryConstraint(filters)
 		if(categoryConstraints !== null){
-			whereConstraint.constraints = [
-				...whereConstraint.constraints,
+			constraints = [
+				...constraints,
 				categoryConstraints
 			]
 		}
 
 		const speciesNamingConstraints: ConstraintPart = SpeciesNamingConstraints.buildConstraintsFilters(filters)
 		if(speciesNamingConstraints !== null){
-			whereConstraint.constraints = [
-				...whereConstraint.constraints,
+			constraints = [
+				...constraints,
 				speciesNamingConstraints
 			]
 		}
+
+		if(constraints.length === 0){
+			return null
+		}
+
+		let whereConstraint: ConstraintPart = new ConstraintPart('where')
+		whereConstraint.constraints = constraints
 
 		return whereConstraint
 	}
@@ -55,6 +54,13 @@ export default class ConstraintBuilder{
 		})
 
 		return filters
+	}
+
+	private static checkFiltersAreEmpty(object) {
+		return Object.values(object).every(v => v && typeof v === 'object'
+			? this.checkFiltersAreEmpty(v)
+			: v === 0 || v === null
+		);
 	}
 
 	private static buildOriginConstraint(filters: object): ConstraintPart{

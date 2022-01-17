@@ -11,43 +11,43 @@ export default class SpeciesNamingConstraints {
 		}
 
 		let sanitizedFilters = this.sanitizeFilters(filters.naming)
-		let filtersAreNull: boolean = true
 
-		Object.keys(sanitizedFilters).forEach((key: string) => {
-			if(sanitizedFilters[key] !== null){
-				filtersAreNull = false
-			}
-		})
-
-		if(filtersAreNull === true){
+		if(this.checkFiltersAreEmpty(sanitizedFilters) === true){
 			return null
 		}
 
-		let namingConstraints: ConstraintPart = new ConstraintPart('naming')
+		let constraints: Array<ConstraintPart> = []
 
 		const buildedNamingConstraints: ConstraintPart = this.buildNamingConstraints(sanitizedFilters)
 		if(buildedNamingConstraints !== null){
-			namingConstraints.constraints = [
-				...namingConstraints.constraints,
+			constraints = [
+				...constraints,
 				buildedNamingConstraints,
 			]
 		}
 
 		const buildedSpeciesFamilyConstraints: ConstraintPart = SpeciesFamilyConstraints.buildConstraintsFilters(sanitizedFilters)
 		if(buildedSpeciesFamilyConstraints !== null){
-			namingConstraints.constraints = [
-				...namingConstraints.constraints,
+			constraints = [
+				...constraints,
 				buildedSpeciesFamilyConstraints,
 			]
 		}
 
 		const buildedSpeciesGenreConstraints: ConstraintPart = SpeciesGenreConstraints.buildConstraintsFilters(sanitizedFilters)
 		if(buildedSpeciesGenreConstraints !== null){
-			namingConstraints.constraints = [
-				...namingConstraints.constraints,
+			constraints = [
+				...constraints,
 				buildedSpeciesGenreConstraints,
 			]
 		}
+
+		if(constraints.length === 0){
+			return null
+		}
+
+		let namingConstraints: ConstraintPart = new ConstraintPart('naming')
+		namingConstraints.constraints = constraints
 
 		return namingConstraints
 	}
@@ -62,10 +62,16 @@ export default class SpeciesNamingConstraints {
 		return filters
 	}
 
+	private static checkFiltersAreEmpty(object) {
+		return Object.values(object).every(v => v && typeof v === 'object'
+			? this.checkFiltersAreEmpty(v)
+			: v === 0 || v === null
+		);
+	}
+
 	private static initNameConstraint(): ConstraintPart{
 		return new ConstraintPart('name')
 	}
-
 
 	private static buildNamingConstraints(filters: object): ConstraintPart{
 
