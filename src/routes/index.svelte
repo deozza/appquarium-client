@@ -79,6 +79,13 @@
 	<div class='w-full lg:w-1/2 h-full order-1 lg:order-2 flex-c'>
 		<BaseHeader baseHeaderModel={headerDataComment} />
 		<BaseParagraph baseParagraphModel={paragraphDataComment} />
+		<a href='/matcher'>
+			<div class='flex-r justify-around bg-green-500 rounded-lg p-3 mt-6' >
+				<div class="flex-c">
+					<p class='text-lg font-bold'>Essayer</p>
+				</div>
+			</div>
+		</a>
 	</div>
 	<div class='w-full lg:w-1/2 h-full order-2 lg:order-1 flex-c bg-teal-800'>
 		<div class='flex-r w-full'>
