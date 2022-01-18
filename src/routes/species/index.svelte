@@ -157,7 +157,7 @@
 		.setStyleOrThrowError('success');
 
 	const buttonResetFilter: BaseButtonModel = new BaseButtonModel('Réinitialiser les filtres')
-		.setStyleOrThrowError('primary')
+		.setStyleOrThrowError('secondary')
 		.setTypeOrThrowError('button')
 
 </script>
@@ -167,7 +167,7 @@
 </section>
 
 <section class='flex-r justify-between'>
-	<div class='bg-teal-800 w-full lg:flex-1 lg:species-list-fullscreen p-6'>
+	<div class='bg-sky-800 w-full lg:flex-1 lg:species-list-fullscreen p-6'>
 		<h2 class='text-2xl'>Filtres</h2>
 		<form class='min-w-full' on:submit|preventDefault={loadSpeciesWithFilter}>
 			<ul class="space-y-6">
