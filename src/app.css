@@ -27,19 +27,19 @@
     }
 
     .btn.btn-primary {
-        @apply bg-blue-500 hover:bg-white text-white hover:text-blue-600 hover:border-blue-600
+        @apply bg-sky-800 border-sky-800 hover:bg-white text-white hover:text-sky-900 hover:border-sky-900
     }
 
     .btn.btn-primary.btn-outlined {
-        @apply bg-white hover:bg-blue-600 text-blue-600 hover:text-white border-blue-600
+        @apply bg-white hover:bg-sky-900 text-sky-900 hover:text-white border-sky-900
     }
 
     .btn.btn-secondary {
-        @apply bg-gray-500 hover:bg-white text-white hover:text-gray-600 hover:border-gray-600
+        @apply bg-teal-800 border-teal-800 hover:bg-white text-white hover:text-teal-900 hover:border-teal-900
     }
 
     .btn.btn-secondary.btn-outlined {
-        @apply bg-white hover:bg-gray-600 text-gray-600 hover:text-white border-gray-600
+        @apply bg-white hover:bg-teal-900 text-teal-900 hover:text-white border-teal-900
     }
 
     .btn.btn-success {
@@ -79,11 +79,11 @@
     }
 
     .pill.pill-primary {
-        @apply bg-blue-500
+        @apply bg-sky-800
     }
 
     .pill.pill-secondary {
-        @apply bg-gray-500
+        @apply bg-teal-800
     }
 
     .pill.pill-success {

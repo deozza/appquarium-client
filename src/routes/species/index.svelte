@@ -94,6 +94,15 @@
 		return listOfSpecies;
 	}
 
+	async function resetFilters(){
+		inputOrigin.value = null
+		inputName.value = null
+		inputGenreName.value = null
+		inputFamilyName.value = null
+
+		await loadSpeciesWithFilter()
+	}
+
 	async function loadFilters(): Promise<object> {
 		const listOfSpeciesFamilies: Result = await speciesFamiliesUseCase.getListOfSpeciesFamilies('', {});
 		if (listOfSpeciesFamilies.isFailed()) {
@@ -146,6 +155,10 @@
 
 	const buttonSubmitFilter: BaseButtonModel = new BaseButtonModel('Filtrer')
 		.setStyleOrThrowError('success');
+
+	const buttonResetFilter: BaseButtonModel = new BaseButtonModel('Réinitialiser les filtres')
+		.setStyleOrThrowError('primary')
+		.setTypeOrThrowError('button')
 
 </script>
 
@@ -202,7 +215,10 @@
 						</li>
 
 					<li class="flex-c space-y-2">
-						<BaseButton baseButtonModel={buttonSubmitFilter} />
+						<div class='flex-c space-y-6'>
+							<BaseButton baseButtonModel={buttonSubmitFilter} />
+							<BaseButton baseButtonModel={buttonResetFilter} on:click={resetFilters}/>
+						</div>
 					</li>
 				{/if}
 			</ul>
