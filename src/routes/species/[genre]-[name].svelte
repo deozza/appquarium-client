@@ -100,7 +100,7 @@
 			</SpeciesData>
 
 			<SpeciesData header={headerDataEnvironment} >
-				<p><span class='font-semibold'>Origine : </span>amérique centrale</p>
+				<p><span class='font-semibold'>Origine : </span>{Species.getTranslatedOrigin(species.origin)}</p>
 				<p><span class='font-semibold'>Zone de vie : </span>surface</p>
 				<p><span class='font-semibold'>Plantes : </span>Oui</p>
 				<p><span class='font-semibold'>Roches : </span>indifférent</p>
