@@ -61,6 +61,7 @@
 	async function loadSpeciesToCompare(uuid: string): Promise<Species> {
 		loadingSpeciesToCompare = true
 		hasCompared = false
+		compareButton.isDisabled = true
 
 		if(uuid === ''){
 			loadingSpeciesToCompare = false
@@ -153,16 +154,17 @@
 	<div class='lg:hidden bg-teal-800 rounded-lg pb-6'>
 		<section class='flex-r justify-between p-3'>
 			<div class='flex-c w-1/3 ml-1'>
-				<BaseSelectInput baseSelectInputModel={inputSpeciesLeft} options={listOfSpecies} on:change={async (e) => await loadSpeciesLeftAndCompute(e.target.value)} }/>
+				<BaseSelectInput baseSelectInputModel={inputSpeciesLeft} options={listOfSpecies} on:change={async (e) => await loadSpeciesLeftAndCompute(e.target.value)} />
 			</div>
 			<div></div>
 			<div class='flex-c w-1/3 mr-1'>
 				<BaseSelectInput baseSelectInputModel={inputSpeciesRight} options={listOfSpecies} on:change={async (e) => loadSpeciesRightAndCompute(e.target.value) } />
 			</div>
 		</section>
+
 		<section class='flex-r justify-between my-3'>
 			<div class='flex-c w-1/3 ml-1'>
-				{#if speciesLeft !== undefined && speciesLeft !== null}
+				{#if speciesLeft !== null}
 					<BaseHeader baseHeaderModel={speciesLeftHeader} />
 					<img src={speciesLeft.images[0].url} alt={speciesLeft.images[0].title}>
 					<a href={speciesLeft.computeLinkToSpecies()} class='underline'>En savoir plus</a>
@@ -171,7 +173,7 @@
 			<div>
 			</div>
 			<div class='flex-c w-1/3 mr-1'>
-				{#if speciesRight !== undefined && speciesRight !== null}
+				{#if speciesRight !== null}
 					<BaseHeader baseHeaderModel={speciesRightHeader} />
 					<img src={speciesRight.images[0].url} alt={speciesRight.images[0].title}>
 					<a href={speciesRight.computeLinkToSpecies()} class='underline'>En savoir plus</a>
@@ -227,22 +229,36 @@
 		{/if}
 
 	</div>
-<!--
+
 	<div class='lg:block hidden'>
 		<div class='flex-c'>
+			<section class='flex-r justify-between w-full p-6'>
+				<div class='flex-c w-1/3 ml-1'>
+					<BaseSelectInput baseSelectInputModel={inputSpeciesLeft} options={listOfSpecies} on:change={async (e) => await loadSpeciesLeftAndCompute(e.target.value)} }/>
+				</div>
+				<div></div>
+				<div class='flex-c w-1/3 mr-1'>
+					<BaseSelectInput baseSelectInputModel={inputSpeciesRight} options={listOfSpecies} on:change={async (e) => loadSpeciesRightAndCompute(e.target.value) } />
+				</div>
+			</section>
+
 			<section class='flex-r justify-around w-full p-6'>
 				<div class='w-1/5 flex-c'>
-					<BaseHeader baseHeaderModel={speciesLeftHeader} />
-					<img src={speciesLeft.images[0].url} alt={speciesLeft.images[0].title}>
-					<a href={speciesLeft.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+					{#if speciesLeft !== null}
+						<BaseHeader baseHeaderModel={speciesLeftHeader} />
+						<img src={speciesLeft.images[0].url} alt={speciesLeft.images[0].title}>
+						<a href={speciesLeft.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+					{/if}
 				</div>
 				<div class='w-1/5'>
 
 				</div>
 				<div class='w-1/5 flex-c'>
-					<BaseHeader baseHeaderModel={speciesRightHeader} />
-					<img src={speciesRight.images[0].url} alt={speciesRight.images[0].title}>
-					<a href={speciesRight.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+					{#if speciesRight !== null}
+						<BaseHeader baseHeaderModel={speciesRightHeader} />
+						<img src={speciesRight.images[0].url} alt={speciesRight.images[0].title}>
+						<a href={speciesRight.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+					{/if}
 				</div>
 			</section>
 
@@ -294,5 +310,4 @@
 		</div>
 
 	</div>
-	-->
 {/if}
