@@ -49,15 +49,17 @@
 		loadingSpecies = true;
 
 		if(onMount === true){
-			inputOrigin.value = $page.url.searchParams.get('origin')
-			inputName.value = $page.url.searchParams.get('name')
-			inputGenreName.value = $page.url.searchParams.get('genre_name')
-			inputFamilyName.value = $page.url.searchParams.get('family_name')
+			inputOrigin.value = $page.url.searchParams.get('origin') !== 'null' ? $page.url.searchParams.get('origin') : null
+			inputName.value = $page.url.searchParams.get('name') !== 'null' ? $page.url.searchParams.get('name') : null
+			inputGenreName.value = $page.url.searchParams.get('genre_name') !== 'null' ? $page.url.searchParams.get('genre_name') : null
+			inputFamilyName.value = $page.url.searchParams.get('family_name') !== 'null' ? $page.url.searchParams.get('family_name') : null
 		}else{
-			$page.url.searchParams.set('origin', inputOrigin.value)
-			$page.url.searchParams.set('name', inputName.value)
-			$page.url.searchParams.set('genre_name', inputGenreName.value)
-			$page.url.searchParams.set('family_name', inputFamilyName.value)
+
+			inputOrigin.value !== null && inputOrigin.value !== '' ? $page.url.searchParams.set('origin', inputOrigin.value) : $page.url.searchParams.delete('origin')
+			inputName.value !== null && inputName.value !== '' ? $page.url.searchParams.set('name', inputName.value) : $page.url.searchParams.delete('name')
+			inputGenreName.value !== null && inputGenreName.value !== '' ? $page.url.searchParams.set('genre_name', inputGenreName.value) : $page.url.searchParams.delete('genre_name')
+			inputFamilyName.value !== null && inputFamilyName.value !== '' ? $page.url.searchParams.set('family_name', inputFamilyName.value) : $page.url.searchParams.delete('family_name')
+
 			window.history.replaceState({}, '',$page.url.pathname + $page.url.search)
 		}
 
@@ -152,7 +154,7 @@
 </section>
 
 <section class='flex-r justify-between'>
-	<div class='bg-teal-800 flex-1 lg:species-list-fullscreen p-6'>
+	<div class='bg-teal-800 w-full lg:flex-1 lg:species-list-fullscreen p-6'>
 		<h2 class='text-2xl'>Filtres</h2>
 		<form class='min-w-full' on:submit|preventDefault={loadSpeciesWithFilter}>
 			<ul class="space-y-6">

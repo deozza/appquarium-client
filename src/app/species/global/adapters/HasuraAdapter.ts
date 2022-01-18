@@ -248,8 +248,19 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
     async queryListOfSpeciesOrigins(): Promise<Array<string> | UseCaseError> {
 
         const queryBuilder: Query = new Query('query')
-          .addReturnToQuery(new Query('species_origin')
-            .addReturnToQuery('name'))
+
+        const speciesOriginSubQuery: Query = new Query('species_origin')
+            .addReturnToQuery('name')
+
+        let speciesOriginConstraints: Constraints = new Constraints();
+        speciesOriginConstraints.orderBy = new ConstraintPart('order_by')
+          .addConstraint([
+              new ConstraintPart('name').addConstraint('asc'),
+          ]);
+
+        speciesOriginSubQuery.constraints = speciesOriginConstraints
+
+        queryBuilder.addReturnToQuery(speciesOriginSubQuery)
 
         const query: string = queryBuilder.buildQuery()
 

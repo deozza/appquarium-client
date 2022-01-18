@@ -53,7 +53,8 @@ export default class Species {
     public static getTranslatedOrigin(origin: string): string{
         const ORIGIN_TRANSLATE: object = {
             central_america: "Amérique centrale",
-            amazonia: "Amazonie"
+            amazonia: "Amazonie",
+            tanganyika: "Lac Tanganyika"
         }
 
         return ORIGIN_TRANSLATE[origin]
