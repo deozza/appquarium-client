@@ -64,9 +64,8 @@
 
 </script>
 
-<section class='flex-c mb-6 text-center'>
+<section class='flex-c text-center'>
 	<BaseHeader baseHeaderModel={headerMain} />
-	<h4 class='font-bold text-lg'>Guppy</h4>
 </section>
 
 {#if isLoading}
@@ -75,6 +74,10 @@
 		<p>Chargement ...</p>
 	</section>
 {:else}
+
+	<section class='flex-c text-center'>
+		<h4 class='text-lg'>{species.naming.common_names.join(', ')}</h4>
+	</section>
 
 	<section class='flex-r justify-between items-center w-full'>
 		<div class='flex-c lg:flex-1'>
