@@ -18,7 +18,8 @@
       class:text-red-500={baseSelectInputModel.error === true}
       id={baseSelectInputModel.id}
       name={baseSelectInputModel.name}
-      on:change={handleInput}
+      bind:value={baseSelectInputModel.value}
+      on:change
       on:focusout
       readonly={baseSelectInputModel.readonly === true ? 'readonly' : ''}
       required={baseSelectInputModel.required === true ? 'required' : ''}

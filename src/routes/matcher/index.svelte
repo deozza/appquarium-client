@@ -13,90 +13,169 @@
 	import Result from '../../app/utils/useCasesResult/Result';
 	import { onMount } from 'svelte';
 	import BaseButton from '../../components/atoms/button/BaseButton.svelte';
-
-	const uuidLeft: string = 'c7581031-b745-43b7-94bd-d1fab7ea2beb';
-	const uuidRight: string = 'f663904e-3877-4540-b49b-a252ac65746b';
-
-	let loadingSpecies: boolean = true;
-	let hasCompared: boolean = false
-	let speciesCompatibilityResult: Result = null
-	const errorMapping: object = {
-		waterConstraints: {
-			ph: "",
-			gh: "" ,
-			temp: "",
-		}
-	}
-	let speciesLeft: Species;
-	let speciesRight: Species;
-
-	onMount(async () => {
-		speciesLeft = await loadSpeciesToCompare(uuidLeft);
-		speciesRight = await loadSpeciesToCompare(uuidRight);
-
-		speciesLeftHeader.setContent(speciesLeft.computeName());
-		speciesRightHeader.setContent(speciesRight.computeName());
-
-		loadingSpecies = false;
-	});
+	import BaseSelectInputModel from '../../components/atoms/input/select/BaseSelectInputModel';
+	import BaseSelectInput from '../../components/atoms/input/select/BaseSelectInput.svelte';
+	import Constraints from '../../app/adapters/hasura/HasuraRequestBuilderV2/Constraints';
+	import BaseOptionModel from '../../components/atoms/input/select/BaseOptionModel';
+	import ConstraintPart from '../../app/adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
 
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 
+	let loadingListOfSpecies: boolean = true;
+	let loadingSpeciesToCompare: boolean = false;
+	let hasCompared: boolean = false;
+	let speciesCompatibilityResult: Result = null;
+
+	let errorMapping: object;
+
+	let listOfSpecies: Array<BaseOptionModel>;
+
+	onMount(async () => {
+		listOfSpecies = await loadListOfSpecies();
+		loadingListOfSpecies = false
+	});
+
+	async function loadListOfSpecies(): Promise<Array<BaseOptionModel>> {
+		let speciesConstraints: Constraints = new Constraints();
+		speciesConstraints.orderBy = new ConstraintPart('order_by')
+			.addConstraint([new ConstraintPart('naming').addConstraint([
+				new ConstraintPart('name').addConstraint('asc'),
+				new ConstraintPart('species_genre').addConstraint([
+					new ConstraintPart('name').addConstraint('asc')
+				])
+			])
+			]);
+		const listOfSpeciesFromAdapter: Result = await speciesUseCase.getListOfSpecies('', speciesConstraints);
+		if (listOfSpeciesFromAdapter.isFailed()) {
+			for (const error of listOfSpeciesFromAdapter.errors) {
+				console.log(error);
+			}
+			return null;
+		}
+
+		const options: Array<BaseOptionModel> = listOfSpeciesFromAdapter.content.map((species: Species) => new BaseOptionModel(species.computeName(), species.uuid));
+
+		return options;
+	}
+
 	async function loadSpeciesToCompare(uuid: string): Promise<Species> {
+		loadingSpeciesToCompare = true
+		hasCompared = false
+
+		if(uuid === ''){
+			loadingSpeciesToCompare = false
+			return null;
+		}
 
 		const speciesFromAdapter: Result = await speciesUseCase.getSpeciesByUuid('', uuid);
 		if (speciesFromAdapter.isFailed()) {
 			for (const error of speciesFromAdapter.errors) {
 				console.log(error);
 			}
+			loadingSpeciesToCompare = false
 			return null;
 		}
 
+		loadingSpeciesToCompare = false
 		return speciesFromAdapter.content;
 	}
 
-	function compareSpecies(){
-		speciesCompatibilityResult = speciesUseCase.checkSpeciesCompatibility(speciesLeft, speciesRight)
+	async function loadSpeciesLeftAndCompute(uuid: string){
+		speciesLeft = await loadSpeciesToCompare(uuid)
+		if(speciesLeft !== null){
+			speciesLeftHeader.setContent(speciesLeft.computeName())
+		}
 
-		if(speciesCompatibilityResult.content.water_constraints_errors !== null){
-			if(speciesCompatibilityResult.content.water_constraints_errors.some(error => error.type.includes('ph'))){
-				errorMapping.waterConstraints.ph = 'text-red-500'
+		if(speciesLeft !== null && speciesRight !== null){
+			compareButton.isDisabled = false
+		}
+	}
+
+	async function loadSpeciesRightAndCompute(uuid: string){
+		speciesRight = await loadSpeciesToCompare(uuid)
+		if(speciesRight !== null){
+			speciesRightHeader.setContent(speciesRight.computeName())
+		}
+
+		if(speciesLeft !== null && speciesRight !== null){
+			compareButton.isDisabled = false
+		}
+	}
+
+	function compareSpecies() {
+		compareButton.setLoading(true)
+		initErrorMapping()
+		speciesCompatibilityResult = speciesUseCase.checkSpeciesCompatibility(speciesLeft, speciesRight);
+
+		if (speciesCompatibilityResult.content.water_constraints_errors !== undefined && speciesCompatibilityResult.content.water_constraints_errors !== null) {
+			if (speciesCompatibilityResult.content.water_constraints_errors.some(error => error.type.includes('ph'))) {
+				errorMapping.waterConstraints.ph = 'text-red-500';
 			}
 
-			if(speciesCompatibilityResult.content.water_constraints_errors.some(error => error.type.includes('gh'))){
-				errorMapping.waterConstraints.gh = 'text-red-500'
+			if (speciesCompatibilityResult.content.water_constraints_errors.some(error => error.type.includes('gh'))) {
+				errorMapping.waterConstraints.gh = 'text-red-500';
 			}
 
-			if(speciesCompatibilityResult.content.water_constraints_errors.some(error => error.type.includes('temp'))){
-				errorMapping.waterConstraints.temp = 'text-red-500'
+			if (speciesCompatibilityResult.content.water_constraints_errors.some(error => error.type.includes('temp'))) {
+				errorMapping.waterConstraints.temp = 'text-red-500';
 			}
 		}
 
-		hasCompared = true
+		hasCompared = true;
+		compareButton.setLoading(false)
+
 	}
+
+	function initErrorMapping(){
+		errorMapping = {
+			waterConstraints: {
+				ph: '',
+				gh: '',
+				temp: ''
+			}
+		}
+	}
+
+	let inputSpeciesLeft: BaseSelectInputModel = new BaseSelectInputModel('listOfSpeciesLeft');
+	let inputSpeciesRight: BaseSelectInputModel = new BaseSelectInputModel('listOfSpeciesRight');
+	let speciesLeft: Species = null
+	let speciesRight: Species = null
 
 </script>
 <section>
 	<BaseHeader baseHeaderModel={header} />
 </section>
 
-{#if loadingSpecies === true}
+{#if loadingListOfSpecies === true}
 	chargement...
 {:else}
 
 	<div class='lg:hidden bg-teal-800 rounded-lg pb-6'>
+		<section class='flex-r justify-between p-3'>
+			<div class='flex-c w-1/3 ml-1'>
+				<BaseSelectInput baseSelectInputModel={inputSpeciesLeft} options={listOfSpecies} on:change={async (e) => await loadSpeciesLeftAndCompute(e.target.value)} }/>
+			</div>
+			<div></div>
+			<div class='flex-c w-1/3 mr-1'>
+				<BaseSelectInput baseSelectInputModel={inputSpeciesRight} options={listOfSpecies} on:change={async (e) => loadSpeciesRightAndCompute(e.target.value) } />
+			</div>
+		</section>
 		<section class='flex-r justify-between my-3'>
 			<div class='flex-c w-1/3 ml-1'>
-				<BaseHeader baseHeaderModel={speciesLeftHeader} />
-				<img src={speciesLeft.images[0].url} alt={speciesLeft.images[0].title}>
-				<a href={speciesLeft.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+				{#if speciesLeft !== undefined && speciesLeft !== null}
+					<BaseHeader baseHeaderModel={speciesLeftHeader} />
+					<img src={speciesLeft.images[0].url} alt={speciesLeft.images[0].title}>
+					<a href={speciesLeft.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+				{/if}
 			</div>
 			<div>
 			</div>
 			<div class='flex-c w-1/3 mr-1'>
-				<BaseHeader baseHeaderModel={speciesRightHeader} />
-				<img src={speciesRight.images[0].url} alt={speciesRight.images[0].title}>
-				<a href={speciesRight.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+				{#if speciesRight !== undefined && speciesRight !== null}
+					<BaseHeader baseHeaderModel={speciesRightHeader} />
+					<img src={speciesRight.images[0].url} alt={speciesRight.images[0].title}>
+					<a href={speciesRight.computeLinkToSpecies()} class='underline'>En savoir plus</a>
+				{/if}
 			</div>
 		</section>
 
@@ -148,7 +227,7 @@
 		{/if}
 
 	</div>
-
+<!--
 	<div class='lg:block hidden'>
 		<div class='flex-c'>
 			<section class='flex-r justify-around w-full p-6'>
@@ -215,4 +294,5 @@
 		</div>
 
 	</div>
+	-->
 {/if}

@@ -26,9 +26,11 @@ export const speciesRightHeader: BaseHeaderModel = new BaseHeaderModel("")
 speciesRightHeader.additionalClasses = 'text-center'
 
 
-export const compareButton: BaseButtonModel = new BaseButtonModel("Comparer")
+export let compareButton: BaseButtonModel = new BaseButtonModel("Comparer")
 	.setStyleOrThrowError('success')
 	.setTypeOrThrowError('button')
+
+compareButton.isDisabled = true
 
 export const headerDataWaterConstraints: BaseHeaderModel = new BaseHeaderModel("Contraintes d'eau")
 	.setDisplaySizeOrTrowError('xl')
