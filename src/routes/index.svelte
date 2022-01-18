@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {headerMain, headerLastSpeciesComment, headerLastSpecies, headerDataComment, paragraphDataComment, listStyle, dummyLoading} from '../components/pages/index/Modeles';
+	import {headerMain, headerLastSpeciesComment, headerLastSpecies, paragraphLastSpeciesComment, headerDataComment, paragraphDataComment, listStyle, dummyLoading} from '../components/pages/index/Modeles';
 
 	import BaseHeader from '../components/atoms/typography/header/BaseHeader.svelte';
 	import SpeciesList from '../components/molecules/speciesList/SpeciesList.svelte';
@@ -33,7 +33,7 @@
 		return listOfSpecies;
 	}
 
-	export let listOfSpecies: Promise<Array<Species>> = loadLastSpecies();
+	let listOfSpecies: Promise<Array<Species>> = loadLastSpecies();
 
 </script>
 
@@ -46,10 +46,11 @@
 <section class='flex-r justify-between w-full h-full lg:h-[50vh]'>
 	<div class='w-full lg:w-1/2 h-full order-1 lg:order-1 flex-c'>
 		<BaseHeader baseHeaderModel={headerLastSpeciesComment} />
+		<BaseParagraph baseParagraphModel={paragraphLastSpeciesComment} />
 	</div>
 	<div class='w-full lg:w-1/2 h-full order-2 lg:order-2 flex-c bg-sky-800'>
 		<BaseHeader baseHeaderModel={headerLastSpecies} />
-		<div class='flex-r w-full'>
+		<div class='flex-r w-full items-start'>
 			{#await listOfSpecies}
 				<SpeciesListLoading {listStyle} {dummyLoading}/>
 			{:then listOfSpecies}

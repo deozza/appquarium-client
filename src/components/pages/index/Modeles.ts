@@ -18,6 +18,9 @@ export const headerLastSpecies: BaseHeaderModel = new BaseHeaderModel('Dernière
 	.setColorOrTrowError('white');
 headerLastSpecies.additionalClasses = 'text-center';
 
+export const paragraphLastSpeciesComment: BaseParagraphModel = new BaseParagraphModel('Apprenez-en plus rapidement sur de nombreuses espèces de poissons, plantes et invertébrés')
+	.setColorOrTrowError('white');
+
 export const headerDataComment: BaseHeaderModel = new BaseHeaderModel('Compatibilité entre les espèces')
 	.setSizeOrTrowError('h2')
 	.setDisplaySizeOrTrowError('xxl')
@@ -26,6 +29,7 @@ headerDataComment.additionalClasses = 'text-center';
 
 export const paragraphDataComment: BaseParagraphModel = new BaseParagraphModel('Vérifiez en un instant si deux espèces sont compatibles entre elles')
 	.setColorOrTrowError('white');
+
 
 export let listStyle: string = 'square';
 export let dummyLoading: number = 3;

@@ -9,9 +9,13 @@ export default interface SpeciesServicesInterface {
 
     queryGetSpecies(jwt: string, speciesConstraints: Constraints): Promise<Species | UseCaseError>
 
+    queryGetSpeciesByUuid(jwt: string, uuid: string): Promise<Species | UseCaseError>
+
     queryListOfSpecies(jwt: string, speciesConstraints: Constraints): Promise<Array<Species> | UseCaseError>
 
     queryListOfSpeciesCategories(jwt: string): Promise<Array<string> | UseCaseError>
 
     queryListOfSpeciesOrigins(jwt: string): Promise<Array<string> | UseCaseError>
+
+    checkSpeciesCompatibility(speciesLeft: Species, speciesRight: Species): null | object
 }

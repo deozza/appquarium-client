@@ -110,6 +110,65 @@ export default class SpeciesHasuraAdapter extends HasuraClient implements Specie
         }
     }
 
+    async queryGetSpeciesByUuid(uuid:string): Promise<Species | UseCaseError> {
+        const queryBuilder: Query = new Query('query')
+
+        const speciesSubQuery: Query = new Query('species_by_pk')
+          .addReturnToQuery('uuid')
+          .addReturnToQuery('origin')
+          .addReturnToQuery('category')
+          .addReturnToQuery(new Query('naming')
+            .addReturnToQuery('name')
+            .addReturnToQuery('old_names')
+            .addReturnToQuery('common_names')
+            .addReturnToQuery(new Query('species_genre')
+              .addReturnToQuery('name')
+            )
+            .addReturnToQuery(new Query('species_family')
+              .addReturnToQuery('name')
+            )
+          )
+          .addReturnToQuery(new Query('water_constraints')
+            .addReturnToQuery('ph_min')
+            .addReturnToQuery('ph_max')
+            .addReturnToQuery('gh_min')
+            .addReturnToQuery('gh_max')
+            .addReturnToQuery('temp_min')
+            .addReturnToQuery('temp_max')
+          )
+          .addReturnToQuery(new Query('animal_specs')
+            .addReturnToQuery('female_size')
+            .addReturnToQuery('male_size')
+            .addReturnToQuery('longevity_in_years')
+          )
+          .addReturnToQuery(new Query('medias')
+            .addReturnToQuery('url')
+            .addReturnToQuery('title')
+            .addReturnToQuery('source')
+          )
+
+        speciesSubQuery.constraints = new Constraints()
+
+        speciesSubQuery.constraints.where = new ConstraintPart('uuid').addConstraint('"' + uuid + '"')
+
+        queryBuilder.addReturnToQuery(speciesSubQuery)
+
+        const query: string = queryBuilder.buildQuery()
+
+        try {
+            const data = await this.client.request(query)
+
+            return new Species(data.species_by_pk)
+        } catch (e) {
+            if (e.message.includes("JWTExpired")) {
+                return new UseCaseError("JWT expired", 401)
+
+            }
+            console.log(e)
+            return new UseCaseError(e.message, 400)
+        }
+    }
+
     async queryListOfSpecies(speciesConstraints: Constraints): Promise<Array<Species> | UseCaseError> {
 
         const queryBuilder: Query = new Query('query')

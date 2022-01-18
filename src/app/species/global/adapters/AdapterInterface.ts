@@ -9,6 +9,8 @@ export default interface SpeciesAdapterInterface {
 
     queryGetSpecies(speciesConstraints: Constraints): Promise<Species | UseCaseError>
 
+    queryGetSpeciesByUuid(uuid: string): Promise<Species | UseCaseError>
+
     queryListOfSpecies(speciesConstraints: Constraints): Promise<Array<Species> | UseCaseError>
 
     queryListOfSpeciesCategories(): Promise<Array<string> | UseCaseError>

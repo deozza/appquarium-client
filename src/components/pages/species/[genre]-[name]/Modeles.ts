@@ -11,11 +11,11 @@ export const headerDataNaming: BaseHeaderModel = new BaseHeaderModel('Espèce')
 	.setColorOrTrowError('white')
 headerDataNaming.additionalClasses = 'mb-3 font-bold'
 
-export const headerDataWaterContraints: BaseHeaderModel = new BaseHeaderModel("Contraints d'eau")
+export const headerDataWaterConstraints: BaseHeaderModel = new BaseHeaderModel("Contraintes d'eau")
 	.setDisplaySizeOrTrowError('xl')
 	.setSizeOrTrowError('h2')
 	.setColorOrTrowError('white')
-headerDataWaterContraints.additionalClasses = 'mb-3 font-bold'
+headerDataWaterConstraints.additionalClasses = 'mb-3 font-bold'
 
 export const headerDataEnvironment: BaseHeaderModel = new BaseHeaderModel("Habitat")
 	.setDisplaySizeOrTrowError('xl')

@@ -8,110 +8,151 @@ import Species from "../entities/Species";
 import SpeciesServicesInterface from "../services/Services";
 
 import Constraints from '../../../adapters/hasura/HasuraRequestBuilderV2/Constraints';
-import ConstraintBuilder from '../adapters/Constraints';
 
 export default class SpeciesUseCase implements SpeciesUseCaseInterface {
-    async getTotalSpecies(jwt: string): Promise<Result> {
-        let result: Result = new Result()
-        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+	async getTotalSpecies(jwt: string): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const totalSpecies: number | null = await speciesService.queryTotalSpecies(jwt)
+		const totalSpecies: number | null = await speciesService.queryTotalSpecies(jwt)
 
-        if (totalSpecies === null) {
-            result.addError('Query failed', 400)
-            return result
-        }
+		if (totalSpecies === null) {
+			result.addError('Query failed', 400)
+			return result
+		}
 
-        result.content = totalSpecies
-        result.addSuccess("Query is ok", 200)
-        return result
-    }
+		result.content = totalSpecies
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
 
-    async getTotalSpeciesOrigins(jwt: string): Promise<Result> {
-        let result: Result = new Result()
-        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+	async getTotalSpeciesOrigins(jwt: string): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const totalSpeciesOrigins: number | null = await speciesService.queryTotalSpeciesOrigins(jwt)
+		const totalSpeciesOrigins: number | null = await speciesService.queryTotalSpeciesOrigins(jwt)
 
-        if (totalSpeciesOrigins === null) {
-            result.addError('Query failed', 400)
-            return result
-        }
+		if (totalSpeciesOrigins === null) {
+			result.addError('Query failed', 400)
+			return result
+		}
 
-        result.content = totalSpeciesOrigins
-        result.addSuccess("Query is ok", 200)
-        return result
-    }
+		result.content = totalSpeciesOrigins
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
 
-    async getSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result> {
-        let result: Result = new Result()
-        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+	async getSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
 
-        let species: Species | UseCaseError = await speciesService.queryGetSpecies(jwt, speciesConstraints)
+		let species: Species | UseCaseError = await speciesService.queryGetSpecies(jwt, speciesConstraints)
 
-        if (species instanceof UseCaseError) {
-            if (species.code === 400) {
-                result.addError('Query failed', species.code)
-                return result
-            }
+		if (species instanceof UseCaseError) {
+			if (species.code === 400) {
+				result.addError('Query failed', species.code)
+				return result
+			}
 
-            if (species.code === 404) {
-                result.addError('Species not found', species.code)
-                return result
-            }
-        }
+			if (species.code === 404) {
+				result.addError('Species not found', species.code)
+				return result
+			}
+		}
 
-        result.content = species
-        result.addSuccess("Query is ok", 200)
-        return result
-    }
+		result.content = species
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
 
-    async getListOfSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result> {
-        let result: Result = new Result()
-        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+	async getSpeciesByUuid(jwt: string, uuid: string): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        const listOfSpecies: Array<Species> | UseCaseError = await speciesService.queryListOfSpecies(jwt, speciesConstraints)
+		let species: Species | UseCaseError = await speciesService.queryGetSpeciesByUuid(jwt, uuid)
 
-        if (listOfSpecies instanceof UseCaseError) {
-            result.errors.push(listOfSpecies)
-            return result
-        }
+		if (species instanceof UseCaseError) {
+			if (species.code === 400) {
+				result.addError('Query failed', species.code)
+				return result
+			}
 
-        result.content = listOfSpecies
-        result.addSuccess("Query is ok", 200)
-        return result
-    }
+			if (species.code === 404) {
+				result.addError('Species not found', species.code)
+				return result
+			}
+		}
 
-    async getListSpeciesCategories(jwt: string): Promise<Result> {
-        let result: Result = new Result()
-        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+		result.content = species
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
 
-        const speciesCategories: Array<string> | UseCaseError = await speciesService.queryListOfSpeciesCategories(jwt)
+	async getListOfSpecies(jwt: string, speciesConstraints: Constraints): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        if (speciesCategories instanceof UseCaseError) {
-            result.errors.push(speciesCategories)
-            return result
-        }
+		const listOfSpecies: Array<Species> | UseCaseError = await speciesService.queryListOfSpecies(jwt, speciesConstraints)
 
-        result.content = speciesCategories
-        result.addSuccess("Query is ok", 200)
-        return result
-    }
+		if (listOfSpecies instanceof UseCaseError) {
+			result.errors.push(listOfSpecies)
+			return result
+		}
 
-    async getListOfSpeciesOrigins(jwt: string): Promise<Result> {
-        let result: Result = new Result()
-        const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+		result.content = listOfSpecies
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
 
-        const speciesOrigins: Array<string> | UseCaseError = await speciesService.queryListOfSpeciesOrigins(jwt)
+	async getListSpeciesCategories(jwt: string): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
 
-        if (speciesOrigins instanceof UseCaseError) {
-            result.errors.push(speciesOrigins)
-            return result
-        }
+		const speciesCategories: Array<string> | UseCaseError = await speciesService.queryListOfSpeciesCategories(jwt)
 
-        result.content = speciesOrigins
-        result.addSuccess("Query is ok", 200)
-        return result
-    }
+		if (speciesCategories instanceof UseCaseError) {
+			result.errors.push(speciesCategories)
+			return result
+		}
+
+		result.content = speciesCategories
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
+
+	async getListOfSpeciesOrigins(jwt: string): Promise<Result> {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+
+		const speciesOrigins: Array<string> | UseCaseError = await speciesService.queryListOfSpeciesOrigins(jwt)
+
+		if (speciesOrigins instanceof UseCaseError) {
+			result.errors.push(speciesOrigins)
+			return result
+		}
+
+		result.content = speciesOrigins
+		result.addSuccess("Query is ok", 200)
+		return result
+	}
+
+	checkSpeciesCompatibility(speciesLeft: Species, speciesRight: Species): Result {
+		let result: Result = new Result()
+		const speciesService: SpeciesServicesInterface = new SpeciesServicesInterface()
+
+		const compatibility: null | object = speciesService.checkSpeciesCompatibility(speciesLeft, speciesRight)
+
+		if(compatibility === null){
+
+			result.addSuccess("Species are compatible", 200)
+			return result
+		}
+
+		result.addError('Species are not compatible', 400)
+
+		result.content = compatibility
+		return result
+
+	}
 }

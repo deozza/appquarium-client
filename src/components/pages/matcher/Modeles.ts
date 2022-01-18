@@ -1,4 +1,5 @@
 import BaseHeaderModel from '../../atoms/typography/header/BaseHeaderModel';
+import BaseButtonModel from '../../atoms/button/BaseButtonModel';
 
 export const header: BaseHeaderModel = new BaseHeaderModel("Comparateur d'espèces")
 	.setDisplaySizeOrTrowError('xxxl')
@@ -6,7 +7,7 @@ export const header: BaseHeaderModel = new BaseHeaderModel("Comparateur d'espèc
 	.setColorOrTrowError('white')
 header.additionalClasses = 'text-center'
 
-export const speciesLeftHeader: BaseHeaderModel = new BaseHeaderModel("Poecilia Reticulata")
+export const speciesLeftHeader: BaseHeaderModel = new BaseHeaderModel("")
 	.setDisplaySizeOrTrowError('xxl')
 	.setSizeOrTrowError('h2')
 	.setColorOrTrowError('white')
@@ -18,11 +19,16 @@ export const resultHeader: BaseHeaderModel = new BaseHeaderModel("Resultat")
 	.setColorOrTrowError('white')
 resultHeader.additionalClasses = 'text-center'
 
-export const speciesRightHeader: BaseHeaderModel = new BaseHeaderModel("Corydoras panda")
+export const speciesRightHeader: BaseHeaderModel = new BaseHeaderModel("")
 	.setDisplaySizeOrTrowError('xxl')
 	.setSizeOrTrowError('h2')
 	.setColorOrTrowError('white')
 speciesRightHeader.additionalClasses = 'text-center'
+
+
+export const compareButton: BaseButtonModel = new BaseButtonModel("Comparer")
+	.setStyleOrThrowError('success')
+	.setTypeOrThrowError('button')
 
 export const headerDataWaterConstraints: BaseHeaderModel = new BaseHeaderModel("Contraintes d'eau")
 	.setDisplaySizeOrTrowError('xl')

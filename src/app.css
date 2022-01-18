@@ -7,7 +7,7 @@
     main > div.content{
         @apply text-white;
         padding-top: 64px;
-        min-height: calc(100vh - 64px);
+        min-height: 100vh;
     }
 
     div.species-list-fullscreen{

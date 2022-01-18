@@ -2,7 +2,7 @@
 	import {
 		headerMain,
 		headerDataNaming,
-		headerDataWaterContraints,
+		headerDataWaterConstraints,
 		headerDataEnvironment,
 		headerDataAquarium,
 		headerDataBehaviour,
@@ -60,7 +60,7 @@
 		return species;
 	}
 
-	export let species: Promise<Species>;
+	let species: Promise<Species>;
 
 </script>
 
@@ -90,7 +90,7 @@
 				<p><span class='font-semibold'>Genre : </span>{species.naming.species_genre.name}</p>
 			</SpeciesData>
 
-			<SpeciesData header={headerDataWaterContraints} >
+			<SpeciesData header={headerDataWaterConstraints} >
 				<p><span class='font-semibold'>pH : </span>entre {species.water_constraints.ph_min} et {species.water_constraints.ph_max}</p>
 				<p><span class='font-semibold'>GH : </span>entre {species.water_constraints.gh_min} et {species.water_constraints.gh_max}</p>
 				<p><span class='font-semibold'>Température : </span>entre {species.water_constraints.temp_min} et {species.water_constraints.temp_max}°C</p>
