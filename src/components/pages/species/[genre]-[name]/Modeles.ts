@@ -23,6 +23,12 @@ export const headerDataEnvironment: BaseHeaderModel = new BaseHeaderModel("Habit
 	.setColorOrTrowError('white')
 headerDataEnvironment.additionalClasses = 'mb-3 font-bold'
 
+export const headerDataSpecs: BaseHeaderModel = new BaseHeaderModel("Caractéristiques")
+	.setDisplaySizeOrTrowError('xl')
+	.setSizeOrTrowError('h2')
+	.setColorOrTrowError('white')
+headerDataEnvironment.additionalClasses = 'mb-3 font-bold'
+
 export const headerDataAquarium: BaseHeaderModel = new BaseHeaderModel("Aquarium")
 	.setDisplaySizeOrTrowError('xl')
 	.setSizeOrTrowError('h2')

@@ -6,6 +6,7 @@
 		headerDataEnvironment,
 		headerDataAquarium,
 		headerDataBehaviour,
+		headerDataSpecs,
 		headerDataReproduction,
 		headerDataDescription
 	} from '../../components/pages/species/[genre]-[name]/Modeles';
@@ -97,6 +98,20 @@
 				<p><span class='font-semibold'>pH : </span>entre {species.water_constraints.ph_min} et {species.water_constraints.ph_max}</p>
 				<p><span class='font-semibold'>GH : </span>entre {species.water_constraints.gh_min} et {species.water_constraints.gh_max}</p>
 				<p><span class='font-semibold'>Température : </span>entre {species.water_constraints.temp_min} et {species.water_constraints.temp_max}°C</p>
+			</SpeciesData>
+
+			<SpeciesData header={headerDataSpecs} >
+				{#if species.category === 'plant'}
+					<p><span class='font-semibold'>Taille : </span>{species.plant_specs.size}cm</p>
+					<p><span class='font-semibold'>Zone de plantation : </span>{species.plant_specs.zone}</p>
+					<p><span class='font-semibold'>Croissance : </span>{species.plant_specs.growth_speed}</p>
+					<p><span class='font-semibold'>Apport en CO2 : </span>{species.plant_specs.need_in_carbone}</p>
+					<p><span class='font-semibold'>Besoin d'un terreau : </span>{species.plant_specs.need_in_fertilizer}</p>
+				{:else}
+					<p><span class='font-semibold'>Taille du male : </span>{species.animal_specs.male_size}cm</p>
+					<p><span class='font-semibold'>Taille de la femelle : </span>{species.animal_specs.female_size}cm</p>
+					<p><span class='font-semibold'>Espérance de vie : </span>{species.animal_specs.longevity_in_years} ans</p>
+				{/if}
 			</SpeciesData>
 
 			<SpeciesData header={headerDataEnvironment} >
