@@ -28,10 +28,14 @@
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
 
 	let isLoading: boolean = true
+	let species: Species;
 
 	onMount(async () => {
-		await loadSingleSpecies()
-		isLoading = false
+		species = await loadSingleSpecies()
+
+		console.log(species)
+
+		//isLoading = false
 	})
 
 	async function loadSingleSpecies(): Promise<Species> {
@@ -54,14 +58,12 @@
 			for (const error of speciesFromHasura.errors) {
 				console.log(error);
 			}
-			return speciesFromHasura;
+			return speciesFromHasura.content;
 		}
-		species = speciesFromHasura.content;
 
-		return species;
+		return speciesFromHasura.content;
 	}
 
-	let species: Promise<Species>;
 
 </script>
 
@@ -116,34 +118,28 @@
 
 			<SpeciesData header={headerDataEnvironment} >
 				<p><span class='font-semibold'>Origine : </span>{Species.getTranslatedOrigin(species.origin)}</p>
-				<p><span class='font-semibold'>Zone de vie : </span>surface</p>
+				<p><span class='font-semibold'>Zone de vie : </span>{species.animal_behaviour.zone}</p>
 				<p><span class='font-semibold'>Plantes : </span>Oui</p>
 				<p><span class='font-semibold'>Roches : </span>indifférent</p>
 				<p><span class='font-semibold'>Racines : </span>indifférent</p>
-				<p><span class='font-semibold'>Type de sable : </span>indifférent</p>
-				<p><span class='font-semibold'>Lumière : </span>indifférent</p>
+				<p><span class='font-semibold'>Type de sable : </span>{species.aquarium_contraints.soil_kind}</p>
 			</SpeciesData>
 
 			<SpeciesData header={headerDataAquarium} >
-				<p><span class='font-semibold'>Volume brut minimal : </span>54L</p>
-				<p><span class='font-semibold'>Longueur minimale : </span>Poecilia</p>
-				<p><span class='font-semibold'>Hauteur minimale : </span>Poecilia Reticulata</p>
-				<p><span class='font-semibold'>Hauteur maximale : </span>Guppy</p>
+				<p><span class='font-semibold'>Type d'aquarium : </span>{species.animal_behaviour.aquarium_kind}</p>
+				<p><span class='font-semibold'>Volume brut minimal : </span>{species.aquarium_contraints.min_volume}</p>
+				<p><span class='font-semibold'>Longueur minimale : </span>{species.aquarium_contraints.min_length}</p>
+				<p><span class='font-semibold'>Hauteur maximale : </span>{species.aquarium_contraints.max_height}</p>
 			</SpeciesData>
 
 			<SpeciesData header={headerDataBehaviour} >
-				<p><span class='font-semibold'>Régime : </span>omnivore</p>
-				<p><span class='font-semibold'>Avec les autres : </span>calme</p>
-				<p><span class='font-semibold'>Entre eux : </span>calme</p>
-				<p><span class='font-semibold'>Minimum dans le groupe: </span>4</p>
-				<p>1 male pour 3 femelles</p>
-			</SpeciesData>
-
-			<SpeciesData header={headerDataReproduction} >
-				<p><span class='font-semibold'>Famille : </span>Poecilidae</p>
-				<p><span class='font-semibold'>Genre: </span>Poecilia</p>
-				<p><span class='font-semibold'>Nom: </span>Poecilia Reticulata</p>
-				<p><span class='font-semibold'>Noms communs: </span>Guppy</p>
+				<p><span class='font-semibold'>Régime : </span>{species.animal_behaviour.alimentation}</p>
+				<p><span class='font-semibold'>Actif : </span>{species.animal_behaviour.diurnal}</p>
+				<p><span class='font-semibold'>Avec les autres : </span>{species.animal_behaviour.extraspecific_behaviour}</p>
+				<p><span class='font-semibold'>Entre eux : </span>{species.animal_behaviour.intraspecific_behaviour}</p>
+				<p><span class='font-semibold'>Minimum dans le groupe : </span>{species.animal_behaviour.min_group}</p>
+				<p><span class='font-semibold'>Maximum dans le groupe : </span>{species.animal_behaviour.max_group}</p>
+				<p>1 male pour {species.animal_behaviour.female_per_male} femelles</p>
 			</SpeciesData>
 		</div>
 

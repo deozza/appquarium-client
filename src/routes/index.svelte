@@ -11,8 +11,16 @@
 	import Stats from '../components/molecules/index/stats/Stats.svelte';
 	import Constraints from '../app/adapters/hasura/HasuraRequestBuilderV2/Constraints';
 	import ConstraintPart from '../app/adapters/hasura/HasuraRequestBuilderV2/ConstraintPart';
+	import { onMount } from 'svelte';
 
 	const speciesUseCase: SpeciesUseCase = new SpeciesUseCase();
+	let listOfSpecies: Array<Species> = []
+	let loadingSpecies: boolean = true;
+
+	onMount(async () => {
+		listOfSpecies = await loadLastSpecies()
+		loadingSpecies = false
+	})
 
 	async function loadLastSpecies(): Promise<Array<Species>> {
 
@@ -26,15 +34,10 @@
 			for (const error of listOfSpeciesFromHasura.errors) {
 				console.log(error);
 			}
-			return listOfSpecies;
+			return listOfSpeciesFromHasura.content;
 		}
-		listOfSpecies = listOfSpeciesFromHasura.content;
-
-		return listOfSpecies;
+		return listOfSpeciesFromHasura.content;
 	}
-
-	let listOfSpecies: Promise<Array<Species>> = loadLastSpecies();
-
 </script>
 
 <section class='flex-c w-full h-[90vh] space-y-6'>
@@ -51,9 +54,9 @@
 	<div class='w-full lg:w-1/2 h-full order-2 lg:order-2 flex-c bg-sky-800'>
 		<BaseHeader baseHeaderModel={headerLastSpecies} />
 		<div class='flex-r w-full items-start'>
-			{#await listOfSpecies}
+			{#if loadingSpecies}
 				<SpeciesListLoading {listStyle} {dummyLoading}/>
-			{:then listOfSpecies}
+			{:else}
 				{#each listOfSpecies as species }
 					<SpeciesList {listStyle} {species}/>
 				{/each}
@@ -69,8 +72,7 @@
 						</div>
 					</div>
 				</a>
-			{:catch errors}
-			{/await}
+				{/if}
 		</div>
 	</div>
 </section>
