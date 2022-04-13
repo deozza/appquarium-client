@@ -37,3 +37,15 @@ export const headerDataWaterConstraints: BaseHeaderModel = new BaseHeaderModel("
 	.setSizeOrTrowError('h2')
 	.setColorOrTrowError('white')
 headerDataWaterConstraints.additionalClasses = 'text-center'
+
+export const headerDataAquariumConstraints: BaseHeaderModel = new BaseHeaderModel("Contraintes d'aquarium")
+	.setDisplaySizeOrTrowError('xl')
+	.setSizeOrTrowError('h2')
+	.setColorOrTrowError('white')
+headerDataAquariumConstraints.additionalClasses = 'text-center'
+
+export const headerDataAnimalBehaviour: BaseHeaderModel = new BaseHeaderModel("Comportement")
+	.setDisplaySizeOrTrowError('xl')
+	.setSizeOrTrowError('h2')
+	.setColorOrTrowError('white')
+headerDataAnimalBehaviour.additionalClasses = 'text-center'

@@ -7,7 +7,7 @@
 
 <main class='bg-gray-900'>
 	<Navbar/>
-	<div class='content px-2 sm:px-6 lg:px-8'>
+	<div class='content px-2 sm:px-6 lg:px-8 pb-6'>
 		<slot></slot>
 	</div>
 </main>
