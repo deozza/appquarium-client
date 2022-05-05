@@ -7,3 +7,4 @@ node_modules
 !.env.example
 /.idea
 /.netlify
+/src/app/utils/i18n/i18n.json
