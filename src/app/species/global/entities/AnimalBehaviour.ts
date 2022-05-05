@@ -31,4 +31,20 @@ export default class AnimalBehaviour {
         this.diurnal = animalBehaviour.hasOwnProperty('diurnal') ? animalBehaviour['diurnal'] : true
     }
 
+    public zoneAsString(): string {
+        if(this.zone.length > 0) {
+            return this.zone.join(', ')
+        }
+
+        return ''
+    }
+
+    public alimentationAsString(): string {
+        if(this.alimentation.length > 0) {
+            return this.alimentation.join(', ')
+        }
+
+        return ''
+    }
+
 }

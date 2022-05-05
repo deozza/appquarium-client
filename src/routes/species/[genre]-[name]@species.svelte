@@ -35,7 +35,7 @@
 
 		console.log(species)
 
-		//isLoading = false
+		isLoading = false
 	})
 
 	async function loadSingleSpecies(): Promise<Species> {
@@ -86,8 +86,7 @@
 		<div class='flex-c lg:flex-1'>
 			<img src={species.images[0].url} alt={species.images[0].title}>
 
-			<SpeciesData header={headerDataDescription} >
-			</SpeciesData>
+			<SpeciesData header={headerDataDescription} />
 		</div>
 		<div class='flex-r justify-around items-center' style='flex:2'>
 
@@ -118,22 +117,22 @@
 
 			<SpeciesData header={headerDataEnvironment} >
 				<p><span class='font-semibold'>Origine : </span>{Species.getTranslatedOrigin(species.origin)}</p>
-				<p><span class='font-semibold'>Zone de vie : </span>{species.animal_behaviour.zone}</p>
+				<p><span class='font-semibold'>Zone de vie : </span>{species.animal_behaviour.zoneAsString()}</p>
 				<p><span class='font-semibold'>Plantes : </span>Oui</p>
 				<p><span class='font-semibold'>Roches : </span>indifférent</p>
 				<p><span class='font-semibold'>Racines : </span>indifférent</p>
-				<p><span class='font-semibold'>Type de sable : </span>{species.aquarium_contraints.soil_kind}</p>
+				<p><span class='font-semibold'>Type de sable : </span>{species.aquarium_constraints.soil_kind}</p>
 			</SpeciesData>
 
 			<SpeciesData header={headerDataAquarium} >
 				<p><span class='font-semibold'>Type d'aquarium : </span>{species.animal_behaviour.aquarium_kind}</p>
-				<p><span class='font-semibold'>Volume brut minimal : </span>{species.aquarium_contraints.min_volume}</p>
-				<p><span class='font-semibold'>Longueur minimale : </span>{species.aquarium_contraints.min_length}</p>
-				<p><span class='font-semibold'>Hauteur maximale : </span>{species.aquarium_contraints.max_height}</p>
+				<p><span class='font-semibold'>Volume brut minimal : </span>{species.aquarium_constraints.min_volume}</p>
+				<p><span class='font-semibold'>Longueur minimale : </span>{species.aquarium_constraints.min_length}</p>
+				<p><span class='font-semibold'>Hauteur maximale : </span>{species.aquarium_constraints.max_height}</p>
 			</SpeciesData>
 
 			<SpeciesData header={headerDataBehaviour} >
-				<p><span class='font-semibold'>Régime : </span>{species.animal_behaviour.alimentation}</p>
+				<p><span class='font-semibold'>Régime : </span>{species.animal_behaviour.alimentationAsString()}</p>
 				<p><span class='font-semibold'>Actif : </span>{species.animal_behaviour.diurnal}</p>
 				<p><span class='font-semibold'>Avec les autres : </span>{species.animal_behaviour.extraspecific_behaviour}</p>
 				<p><span class='font-semibold'>Entre eux : </span>{species.animal_behaviour.intraspecific_behaviour}</p>
