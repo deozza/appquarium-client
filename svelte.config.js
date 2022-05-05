@@ -1,5 +1,5 @@
 import preprocess from 'svelte-preprocess';
-import  adapter from '@sveltejs/adapter-netlify'
+import adapter from '@sveltejs/adapter-netlify';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -8,13 +8,7 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter(),
-
-		vite: () => ({
-			optimizeDeps: {
-				exclude: ['@urql/svelte'],
-			}
-		})
+		adapter: adapter()
 	}
 };
 
